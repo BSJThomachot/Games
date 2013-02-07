@@ -72,11 +72,19 @@ void Player::update(bool up, bool down, float dt)
 	if (up)
 	{
 		this->fY -= dt * 100;
+		if (this->fY <= 0)
+		{
+			this->fY = 0;
+		}
 	}
 	if (down)
 	{
 		this->fY += dt * 100;
+		if (this->fY >= SCREEN_HEIGHT - this->fHeight)
+		{
+			this->fY = SCREEN_HEIGHT - this->fHeight;
+		}
 	}
-	// replace sprite
+	// adjust sprite position
 	this->sprite.setPosition(this->getPosition());
 }
