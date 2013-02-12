@@ -1,122 +1,239 @@
 #include "Ball.h"
 
-
+// default constructor
 Ball::Ball(void)
 {
 }
 
+// constructor
 Ball::Ball(sf::Texture& texture, float x, float y, float radius)
 {
-	this->sprite = sf::Sprite(texture);
-	this->setPosition(x,y);
-	this->sprite.setPosition(x,y);
-	this->fRadius = radius;
-	this->iDirX = 1;
-	this->iDirY = 1;
+	this->m_sprite = sf::Sprite(texture);
+	this->SetPosition(x,y);
+	this->m_sprite.setPosition(x,y);
+	this->m_fDimension = radius;
+	this->m_iDirX = 1;
+	this->m_iDirY = 1;
 
-	// start at 50 speed?
-	this->fSpeed = 100;
+	this->m_fSpeed = 200.0f;
+	this->Timer = 0;
+	this->m_fScale = 1.0f;
+
+	this->binGame = false;
+	this->Timer = 3;
+
+	this->m_bWarpping = false;
+	this->m_colliding = false;
 
 }
 
-
+// destructor
 Ball::~Ball(void)
 {
 }
 
-void Ball::setPosition(float x, float y)
+// set position with x and y
+void Ball::SetPosition(float x, float y)
 {
-	this->fX = x;
-	this->fY = y;
+	this->m_fX = x;
+	this->m_fY = y;
 }
 
-void Ball::setPosition(sf::Vector2f vPos)
+// set position with a vector
+void Ball::SetPosition(sf::Vector2f& vPos)
 {
-	this->fX = vPos.x;
-	this->fY = vPos.y;
+	this->m_fX = vPos.x;
+	this->m_fY = vPos.y;
 }
 
-sf::Vector2f Ball::getPosition(void)
+// get position
+sf::Vector2f Ball::GetPosition(void)
 {
-	return sf::Vector2f(this->fX,this->fY);
+	return sf::Vector2f(this->m_fX,this->m_fY);
 }
 
-void Ball::setDirection(int x, int y)
+// set direction with x and y 
+void Ball::SetDirection(int x, int y)
 {
-	this->iDirX = x;
-	this->iDirY = y;
+	this->m_iDirX = x;
+	this->m_iDirY = y;
 }
 
-void Ball::setDirection(sf::Vector2i vDir)
+// set direction with a vector
+void Ball::SetDirection(sf::Vector2i vDir)
 {
-	this->iDirX = vDir.x;
-	this->iDirY = vDir.y;
-}
-	
-sf::Vector2i Ball::getDirection(void)
-{
-	return sf::Vector2i(this->iDirX,this->iDirY);
+	this->m_iDirX = vDir.x;
+	this->m_iDirY = vDir.y;
 }
 
-void Ball::setRadius(float r)
+// get direction
+sf::Vector2i Ball::GetDirection(void)
 {
-	this->fRadius = r;
+	return sf::Vector2i(this->m_iDirX,this->m_iDirY);
 }
 
-float Ball::getRadius(void)
+// set speed
+void Ball::SetSpeed(float s)
 {
-	return this->fRadius;
+	this->m_fSpeed = s;
 }
 
-void Ball::draw(sf::RenderWindow * window)
+// get speed
+float Ball::GetSpeed(void)
 {
-	window->draw(this->sprite);
+	return this->m_fSpeed;
 }
 
-void Ball::update(Player * p1, Player * p2, float dt)
+// set dimension
+void Ball::SetDim(float value)
 {
-	// update coordinates according to direction
-	this->fX += this->iDirX*this->fSpeed*dt;
-	this->fY += this->iDirY*this->fSpeed*dt;
-	// check if getting out of the screen
-	if (this->fY > SCREEN_HEIGHT - 32)
+	this->m_fDimension = value;
+}
+
+// get dimension of the ball
+float Ball::GetDim(void)
+{
+	return this->m_fDimension * this->m_fScale;
+}
+
+// Set Scale
+void Ball::SetScale(float s)
+{
+	this->m_sprite.setScale(s,s);
+	this->m_fScale = s;
+}
+
+// get Scale
+float Ball::GetScale(void)
+{
+	return this->m_fScale;
+}
+
+// warp or not the ball
+void Ball::Warpping(bool val)
+{
+	this->m_bWarpping = val;
+}
+
+// is the ball being warpped?
+bool Ball::IsWarpping(void)
+{
+	return this->m_bWarpping;
+}
+
+// check if intersects with player
+bool Ball::Intersects(Player * p)
+{
+	return !((p->GetPosition().x > this->m_fX + this->GetDim())
+			||(p->GetPosition().x + p->GetWidth() < this->m_fX)
+			||(p->GetPosition().y > this->m_fY + this->GetDim())
+			||(p->GetPosition().y + p->GetHeight() < this->m_fY));
+}
+
+// launch the ball
+void Ball::Launch(void)
+{	
+	// back in the game!
+	this->binGame = true;
+	// reset timer
+	this->Timer = 3;
+	// reset speed
+	this->m_fSpeed = 200.0f;
+}
+
+// Draw the ball
+void Ball::Draw(sf::RenderWindow * window)
+{
+	window->draw(this->m_sprite);
+	// draw countdown when appropriate
+	if (!this->binGame)
 	{
-		this->fY = SCREEN_HEIGHT - 32;
-		this->iDirY *= -1;
+		window->draw(this->m_time);
 	}
-	else if (this->fY < 0)
+}
+
+// Update the ball
+void Ball::Update(Player * p1, Player * p2, float dt)
+{
+	// if the ball is in game
+	if (this->binGame)
 	{
-		this->fY = 0;
-		this->iDirY *= -1;
+		// update coordinates according to direction
+		this->m_fX += this->m_iDirX*this->m_fSpeed*dt;
+		this->m_fY += this->m_iDirY*this->m_fSpeed*dt;
+		// check if getting out of the screen
+		if (this->m_fY > SCREEN_HEIGHT - 32)
+		{
+			this->m_fY = SCREEN_HEIGHT - 32;
+			this->m_iDirY *= -1;
+		}
+		else if (this->m_fY < 0)
+		{
+			this->m_fY = 0;
+			this->m_iDirY *= -1;
+		}
+		// Score!
+		else if (this->m_fX > SCREEN_WIDTH - 32)
+		{
+			p1->SetScore(p1->GetScore() + 1);
+			this->binGame = false;
+			// reset position
+			this->SetPosition(SCREEN_WIDTH/2 - this->m_fDimension/2,SCREEN_HEIGHT/2 - this->m_fDimension/2);
+			// reset scale
+			this->SetScale(1.0f);
+			// face other player
+			this->m_iDirX = -1;
+		}
+		else if (this->m_fX < 0)
+		{
+			p2->SetScore(p2->GetScore() + 1);
+			this->binGame = false;
+			// reset position
+			this->SetPosition(SCREEN_WIDTH/2 - this->m_fDimension/2,SCREEN_HEIGHT/2 - this->m_fDimension/2);
+			// reset scale
+			this->SetScale(1.0f);
+			// face other player
+			this->m_iDirX = 1;
+		} 
+		else if (this->Intersects(p1) || this->Intersects(p2))
+		{
+			// if already colling
+			if (this->m_colliding)
+			{
+				this->m_iDirY *= -1;
+				this->m_colliding = false;
+			}
+			else
+			{
+				// bounce
+				this->m_iDirX *= -1;
+				// and increase speed! 
+				this->m_fSpeed *= 1.1f;
+				// is colliding
+				this->m_colliding = true;
+			}
+		}
+		else
+		{
+			this->m_colliding = false;
+		}
 	}
-	// will have to score points, for now just boucing
-	else if (this->fX > SCREEN_WIDTH - 32)
+	else // not in game
 	{
-		this->fX = SCREEN_WIDTH - 32;
-		this->iDirX *= -1;
-	}
-	else if (this->fX < 0)
-	{
-		this->fX = 0;
-		this->iDirX *= -1;
-	} 
-	else if (this->fX < p1->getPosition().x + p1->getWidth() &&
-				this->fY > p1->getPosition().y && 
-				this->fY < p1->getPosition().y + p1->getHeight())
-	{
-		this->iDirX *= -1;
-		this->fSpeed += 5;
-	}
-	else if (this->fX + this->fRadius > p2->getPosition().x &&
-				this->fY > p2->getPosition().y && 
-				this->fY < p2->getPosition().y + p2->getHeight())
-	{
-		this->iDirX *= -1;
-		this->fSpeed += 5;
+		this->Timer -= dt;
+		int second = (int)this->Timer + 1;
+		char buf[32]; 
+		sprintf(buf,"%i",second);
+		this->m_time.setString(sf::String(buf));
+		this->m_time.setPosition(SCREEN_WIDTH/2,SCREEN_HEIGHT/2);
+		// countdown over!
+		if (this->Timer < 0)
+		{
+			this->Launch();
+		}
 	}
 
-
-	// set sprite
-	this->sprite.setPosition(this->fX,this->fY);
+	// set m_sprite
+	this->m_sprite.setPosition(this->m_fX,this->m_fY);
 
 }

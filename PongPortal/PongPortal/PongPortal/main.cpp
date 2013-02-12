@@ -1,46 +1,68 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
-#include "Misc.h"
-#include "Player.h"
-#include "Ball.h"
+#include "Game.h"
 
 
 int main()
 {
+	// SFML window
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH,SCREEN_HEIGHT), "Pong Portal");
-
+	// loading ressources
+	// loading Font
+	sf::Font font;
+	if (!font.loadFromFile("Fonts/bebas.ttf"))
+	{
+		return EXIT_SUCCESS;
+	}
 	// loading images
-	sf::Texture texture;
-    texture.loadFromFile("Images/Pad.png"); // pad image
+	sf::Texture texturePlayer;
+    if (!texturePlayer.loadFromFile("Images/Pad.png"))
+	{
+		return EXIT_SUCCESS;
+	}
 	sf::Texture textureBall;
-    textureBall.loadFromFile("Images/Ball.png"); // ball image
+    if (!textureBall.loadFromFile("Images/Ball.png"))
+	{
+		return EXIT_SUCCESS;
+	}
+	sf::Texture texturePortal1;
+	if (!texturePortal1.loadFromFile("Images/PortalBlue.png"))
+	{
+		return EXIT_SUCCESS;
+	}
+	sf::Texture texturePortal2;
+	if (!texturePortal2.loadFromFile("Images/PortalOrange.png"))
+	{
+		return EXIT_SUCCESS;
+	}
+	
+	// Create game
+	Game * PongGame = new Game();
+	PongGame->SetUP(texturePlayer,textureBall,texturePortal1,texturePortal2,font);
 
-	// The players
-	Player * player1 = new Player(texture,0,SCREEN_HEIGHT/2 - 64,32,128);
-	Player * player2 = new Player(texture,SCREEN_WIDTH - 32,SCREEN_HEIGHT/2 - 64,32,128);
-	Ball * ball = new Ball(textureBall,SCREEN_WIDTH/2,SCREEN_HEIGHT/2,16);
-
-
-	bool bUpPressed		= false;
-	bool bDownPressed   = false;
-	bool bWPressed		= false;
-	bool bSPressed		= false;	
+	// keys to press
+	bool bUpPressed			= false;
+	bool bDownPressed		= false;
+	bool bWPressed			= false;
+	bool bSPressed			= false;
+	bool bSpacePressed		= false;
+	bool bSpaceJustPressed  = false;
 
 	// The Game's clock
 	sf::Clock clock;
 	while (window.isOpen())
-	{
+	{	
 		// get delta time
 		sf::Time dt = clock.restart();
-		
 		sf::Event event;
 		while (window.pollEvent(event))
-		{
+		{	
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
 			}
+			// check key press
 			if (event.type == sf::Event::KeyPressed)
 			{
 				if (event.key.code == sf::Keyboard::Up)
@@ -59,7 +81,12 @@ int main()
 				{
 					bSPressed = true;
 				}
+				if (event.key.code == sf::Keyboard::Space)
+				{
+					bSpacePressed = true;
+				}
 			}
+			// check key release
 			if (event.type == sf::Event::KeyReleased)
 			{
 				if (event.key.code == sf::Keyboard::Up)
@@ -78,27 +105,25 @@ int main()
 				{
 					bSPressed = false;
 				}
+				if (event.key.code == sf::Keyboard::Space)
+				{
+					bSpacePressed = false;
+				}
 			}
 		}
-
-		// update players
-		player1->update(bUpPressed,bDownPressed,dt.asSeconds());
-		player2->update(bWPressed,bSPressed,dt.asSeconds());
-		ball->update(player1,player2,dt.asSeconds());
-
-
+		// update PongGame
+		PongGame->Update(bUpPressed,bDownPressed,bWPressed,bSPressed,bSpacePressed,bSpaceJustPressed,dt.asSeconds());
 		// clear window
 		window.clear(sf::Color(0,0,0,255));
-		player1->draw(&window);
-		player2->draw(&window);
-		ball->draw(&window);
+		PongGame->Draw(&window);
 		window.display();
+		
+		// stop space repetition
+		bSpaceJustPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 	}
 
 	// clean up
-	delete ball;
-	delete player2;
-	delete player1;
+	delete PongGame;
 
 	return EXIT_SUCCESS;
 }
