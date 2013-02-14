@@ -1,7 +1,11 @@
 // definition of the ball class
-#pragma once
+#ifndef __BALL_H_
+#define __BALL_H_
 #include "Player.h"
 #include <SFML/Graphics.hpp>
+
+namespace portalpong
+{
 
 class Ball
 {
@@ -11,7 +15,7 @@ public:
 	~Ball(void);
 	// getters and setters
 	void SetPosition(float x, float y);
-	void SetPosition(sf::Vector2f& vPos);
+	void SetPosition(const sf::Vector2f& vPos);
 	sf::Vector2f GetPosition(void);
 	void SetDirection(int x, int y);
 	void SetDirection(sf::Vector2i vPos);
@@ -33,29 +37,32 @@ public:
 
 private:
 	// coordinates
-	float m_fX;
-	float m_fY;
+	float m_x;
+	float m_y;
 	// direction
-	int m_iDirX;
-	int m_iDirY;
+	int m_dirX;
+	int m_dirY;
 	// speed
-	float m_fSpeed;
+	float m_speed;
 	// scale
-	float m_fScale;
+	float m_scale;
 
 	// radius
-	float m_fDimension;
+	float m_dimension;
 	// sprite of the ball
 	sf::Sprite m_sprite;
 	// is warpping
-	bool m_bWarpping;
+	bool m_warpping;
 	// is colliding
 	bool m_colliding;
 
-	bool binGame;
+	bool m_inGame;
 	// a timer
-	float Timer;
-	// time info
-	sf::Text m_time;
+	float m_timer;
+	// Time info
+	sf::Text m_timerText;
 };
 
+}
+
+#endif 

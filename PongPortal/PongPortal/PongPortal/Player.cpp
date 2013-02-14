@@ -1,5 +1,7 @@
 #include "Player.h"
 
+using namespace portalpong;
+
 // empty constructor
 Player::Player(void)
 {
@@ -9,15 +11,15 @@ Player::Player(void)
 // constructor
 Player::Player(sf::Texture& texture, float x, float y, int width, int height, sf::Font& font, int id)
 {
-	this->m_sprite = sf::Sprite(texture);
-	this->SetPosition(x,y);
-	this->m_sprite.setPosition(x,y);
-	this->m_fWidth = width;
-	this->m_fHeight = height;
-	this->m_iScore = 0;
-	this->m_Info = sf::Text("0",font);
-	this->m_Info.setPosition((float)(SCREEN_WIDTH/3 * id),0);
-	this->m_fSpeed = 250;
+	m_sprite = sf::Sprite(texture);
+	SetPosition(x,y);
+	m_sprite.setPosition(x,y);
+	m_width = width;
+	m_height = height;
+	m_score = 0;
+	m_info = sf::Text("0",font);
+	m_info.setPosition((float)(SCREEN_WIDTH/3 * id),0);
+	m_speed = 250;
 }
 
 // destructor
@@ -28,63 +30,63 @@ Player::~Player(void)
 
 void Player::SetPosition(float x, float y)
 {
-	this->m_fX = x;
-	this->m_fY = y;
-	this->m_sprite.setPosition(x,y);
+	m_x = x;
+	m_y = y;
+	m_sprite.setPosition(x,y);
 }
 
-void Player::SetPosition(sf::Vector2f& vPos)
+void Player::SetPosition(sf::Vector2f vPos)
 {
-	this->m_fX = vPos.x;
-	this->m_fY = vPos.y;
-	this->m_sprite.setPosition(vPos);
+	m_x = vPos.x;
+	m_y = vPos.y;
+	m_sprite.setPosition(vPos);
 }
 
 
 sf::Vector2f Player::GetPosition(void)
 {
-	return sf::Vector2f(this->m_fX,this->m_fY);
+	return sf::Vector2f( m_x, m_y);
 }
 
 void Player::SetWidth(int w)
 {
-	this->m_fWidth = w;
+	m_width = w;
 }
 
 int Player::GetWidth(void)
 {
-	return this->m_fWidth;
+	return m_width;
 }
 
 void Player::SetHeight(int h)
 {
-	this->m_fHeight = h;
+	m_height = h;
 }
 
 int Player::GetHeight(void)
 {
-	return this->m_fHeight;
+	return m_height;
 }
 
 void Player::SetScore(int s)
 {
-	this->m_iScore = s;
+	m_score = s;
 	char buf[32];
-	sprintf(buf,"%i",s);
-	this->m_Info.setString(sf::String(buf));
+	sprintf_s( buf, 32, "%i", s);
+	m_info.setString(sf::String(buf));
 }
 	
 int Player::GetScore(void)
 {
-	return this->m_iScore;
+	return m_score;
 }
 
 void Player::Draw(sf::RenderWindow * window)
 {
 	// printing player's sprite
-	window->draw(this->m_sprite);
+	window->draw(m_sprite);
 	// then info
-	window->draw(this->m_Info);
+	window->draw(m_info);
 }
 
 // update player
@@ -92,20 +94,20 @@ void Player::Update(bool up, bool down, float dt)
 {
 	if (up)
 	{
-		this->m_fY -= dt * this->m_fSpeed;
-		if (this->m_fY <= 0)
+		m_y -= dt * m_speed;
+		if (m_y <= 0)
 		{
-			this->m_fY = 0;
+			m_y = 0;
 		}
 	}
 	if (down)
 	{
-		this->m_fY += dt * this->m_fSpeed;
-		if (this->m_fY >= SCREEN_HEIGHT - this->m_fHeight)
+		m_y += dt * m_speed;
+		if (m_y >= SCREEN_HEIGHT - m_height)
 		{
-			this->m_fY = (float)(SCREEN_HEIGHT - this->m_fHeight);
+			m_y = (float)(SCREEN_HEIGHT - m_height);
 		}
 	}
 	// adjust sprite position
-	this->m_sprite.setPosition(this->GetPosition());
+	m_sprite.setPosition(GetPosition());
 }

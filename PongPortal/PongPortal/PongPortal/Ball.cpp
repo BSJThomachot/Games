@@ -1,5 +1,7 @@
 #include "Ball.h"
 
+using namespace portalpong;
+
 // default constructor
 Ball::Ball(void)
 {
@@ -8,22 +10,21 @@ Ball::Ball(void)
 // constructor
 Ball::Ball(sf::Texture& texture, float x, float y, float radius)
 {
-	this->m_sprite = sf::Sprite(texture);
-	this->SetPosition(x,y);
-	this->m_sprite.setPosition(x,y);
-	this->m_fDimension = radius;
-	this->m_iDirX = 1;
-	this->m_iDirY = 1;
+	m_sprite = sf::Sprite(texture);
+	SetPosition(x,y);
+	m_sprite.setPosition(x,y);
+	m_dimension = radius;
+	m_dirX = 1;
+	m_dirY = 1;
 
-	this->m_fSpeed = 200.0f;
-	this->Timer = 0;
-	this->m_fScale = 1.0f;
+	m_speed = 200.0f;
+	m_scale = 1.0f;
 
-	this->binGame = false;
-	this->Timer = 3;
+	m_inGame = false;
+	m_timer = 3;
 
-	this->m_bWarpping = false;
-	this->m_colliding = false;
+	m_warpping = false;
+	m_colliding = false;
 
 }
 
@@ -35,120 +36,120 @@ Ball::~Ball(void)
 // set position with x and y
 void Ball::SetPosition(float x, float y)
 {
-	this->m_fX = x;
-	this->m_fY = y;
+	m_x = x;
+	m_y = y;
 }
 
 // set position with a vector
-void Ball::SetPosition(sf::Vector2f& vPos)
+void Ball::SetPosition(const sf::Vector2f& vPos)
 {
-	this->m_fX = vPos.x;
-	this->m_fY = vPos.y;
+	m_x = vPos.x;
+	m_y = vPos.y;
 }
 
 // get position
 sf::Vector2f Ball::GetPosition(void)
 {
-	return sf::Vector2f(this->m_fX,this->m_fY);
+	return sf::Vector2f( m_x, m_y);
 }
 
 // set direction with x and y 
-void Ball::SetDirection(int x, int y)
+void Ball::SetDirection( int x, int y)
 {
-	this->m_iDirX = x;
-	this->m_iDirY = y;
+	m_dirX = x;
+	m_dirY = y;
 }
 
 // set direction with a vector
 void Ball::SetDirection(sf::Vector2i vDir)
 {
-	this->m_iDirX = vDir.x;
-	this->m_iDirY = vDir.y;
+	m_dirX = vDir.x;
+	m_dirY = vDir.y;
 }
 
 // get direction
 sf::Vector2i Ball::GetDirection(void)
 {
-	return sf::Vector2i(this->m_iDirX,this->m_iDirY);
+	return sf::Vector2i( m_dirX, m_dirY);
 }
 
 // set speed
 void Ball::SetSpeed(float s)
 {
-	this->m_fSpeed = s;
+	m_speed = s;
 }
 
 // get speed
 float Ball::GetSpeed(void)
 {
-	return this->m_fSpeed;
+	return m_speed;
 }
 
 // set dimension
 void Ball::SetDim(float value)
 {
-	this->m_fDimension = value;
+	m_dimension = value;
 }
 
 // get dimension of the ball
 float Ball::GetDim(void)
 {
-	return this->m_fDimension * this->m_fScale;
+	return m_dimension * m_scale;
 }
 
 // Set Scale
 void Ball::SetScale(float s)
 {
-	this->m_sprite.setScale(s,s);
-	this->m_fScale = s;
+	m_sprite.setScale(s,s);
+	m_scale = s;
 }
 
 // get Scale
 float Ball::GetScale(void)
 {
-	return this->m_fScale;
+	return m_scale;
 }
 
 // warp or not the ball
 void Ball::Warpping(bool val)
 {
-	this->m_bWarpping = val;
+	m_warpping = val;
 }
 
 // is the ball being warpped?
 bool Ball::IsWarpping(void)
 {
-	return this->m_bWarpping;
+	return m_warpping;
 }
 
 // check if intersects with player
 bool Ball::Intersects(Player * p)
 {
-	return !((p->GetPosition().x > this->m_fX + this->GetDim())
-			||(p->GetPosition().x + p->GetWidth() < this->m_fX)
-			||(p->GetPosition().y > this->m_fY + this->GetDim())
-			||(p->GetPosition().y + p->GetHeight() < this->m_fY));
+	return !((p->GetPosition().x > this->m_x + this->GetDim())
+			||(p->GetPosition().x + p->GetWidth() < this->m_x)
+			||(p->GetPosition().y > this->m_y + this->GetDim())
+			||(p->GetPosition().y + p->GetHeight() < this->m_y));
 }
 
 // launch the ball
 void Ball::Launch(void)
 {	
 	// back in the game!
-	this->binGame = true;
+	m_inGame = true;
 	// reset timer
-	this->Timer = 3;
+	m_timer = 3;
 	// reset speed
-	this->m_fSpeed = 200.0f;
+	m_speed = 200.0f;
 }
 
 // Draw the ball
 void Ball::Draw(sf::RenderWindow * window)
 {
-	window->draw(this->m_sprite);
+	window->draw(m_sprite);
 	// draw countdown when appropriate
-	if (!this->binGame)
+	if (!m_inGame)
 	{
-		window->draw(this->m_time);
+		window->draw(m_timerText);
 	}
 }
 
@@ -156,61 +157,61 @@ void Ball::Draw(sf::RenderWindow * window)
 void Ball::Update(Player * p1, Player * p2, float dt)
 {
 	// if the ball is in game
-	if (this->binGame)
+	if (this->m_inGame)
 	{
 		// update coordinates according to direction
-		this->m_fX += this->m_iDirX*this->m_fSpeed*dt;
-		this->m_fY += this->m_iDirY*this->m_fSpeed*dt;
+		m_x += m_dirX*m_speed*dt;
+		m_y += m_dirY*m_speed*dt;
 		// check if getting out of the screen
-		if (this->m_fY > SCREEN_HEIGHT - 32)
+		if (m_y > SCREEN_HEIGHT - 32)
 		{
-			this->m_fY = SCREEN_HEIGHT - 32;
-			this->m_iDirY *= -1;
+			m_y = SCREEN_HEIGHT - 32;
+			m_dirY *= -1;
 		}
-		else if (this->m_fY < 0)
+		else if (m_y < 0)
 		{
-			this->m_fY = 0;
-			this->m_iDirY *= -1;
+			m_y = 0;
+			m_dirY *= -1;
 		}
 		// Score!
-		else if (this->m_fX > SCREEN_WIDTH - 32)
+		else if (m_x > SCREEN_WIDTH - 32)
 		{
 			p1->SetScore(p1->GetScore() + 1);
-			this->binGame = false;
+			m_inGame = false;
 			// reset position
-			this->SetPosition(SCREEN_WIDTH/2 - this->m_fDimension/2,SCREEN_HEIGHT/2 - this->m_fDimension/2);
+			SetPosition(SCREEN_WIDTH/2 - m_dimension/2,SCREEN_HEIGHT/2 - m_dimension/2);
 			// reset scale
-			this->SetScale(1.0f);
+			SetScale(1.0f);
 			// face other player
-			this->m_iDirX = -1;
+			m_dirX = -1;
 		}
-		else if (this->m_fX < 0)
+		else if (m_x < 0)
 		{
 			p2->SetScore(p2->GetScore() + 1);
-			this->binGame = false;
+			m_inGame = false;
 			// reset position
-			this->SetPosition(SCREEN_WIDTH/2 - this->m_fDimension/2,SCREEN_HEIGHT/2 - this->m_fDimension/2);
+			SetPosition(SCREEN_WIDTH/2 - m_dimension/2,SCREEN_HEIGHT/2 - m_dimension/2);
 			// reset scale
-			this->SetScale(1.0f);
+			SetScale(1.0f);
 			// face other player
-			this->m_iDirX = 1;
+			m_dirX = 1;
 		} 
-		else if (this->Intersects(p1) || this->Intersects(p2))
+		else if (Intersects(p1) || Intersects(p2))
 		{
 			// if already colling
-			if (this->m_colliding)
+			if (m_colliding)
 			{
-				this->m_iDirY *= -1;
-				this->m_colliding = false;
+				m_dirY *= -1;
+				m_colliding = false;
 			}
 			else
 			{
 				// bounce
-				this->m_iDirX *= -1;
+				m_dirX *= -1;
 				// and increase speed! 
-				this->m_fSpeed *= 1.1f;
+				m_speed *= 1.1f;
 				// is colliding
-				this->m_colliding = true;
+				m_colliding = true;
 			}
 		}
 		else
@@ -220,20 +221,20 @@ void Ball::Update(Player * p1, Player * p2, float dt)
 	}
 	else // not in game
 	{
-		this->Timer -= dt;
-		int second = (int)this->Timer + 1;
+		m_timer -= dt;
+		int second = (int)m_timer + 1;
 		char buf[32]; 
-		sprintf(buf,"%i",second);
-		this->m_time.setString(sf::String(buf));
-		this->m_time.setPosition(SCREEN_WIDTH/2,SCREEN_HEIGHT/2);
+		sprintf_s(buf,32,"%i",second);
+		m_timerText.setString(sf::String(buf));
+		m_timerText.setPosition( SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 		// countdown over!
-		if (this->Timer < 0)
+		if (m_timer < 0)
 		{
-			this->Launch();
+			Launch();
 		}
 	}
 
 	// set m_sprite
-	this->m_sprite.setPosition(this->m_fX,this->m_fY);
+	m_sprite.setPosition( m_x, m_y);
 
 }

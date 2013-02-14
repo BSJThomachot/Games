@@ -1,8 +1,11 @@
 // some const and types
-#define SCREEN_WIDTH  800
-#define SCREEN_HEIGHT 600
-#define PLAYER_HEIGHT 128
-#define PLAYER_WIDTH  32
-#define PORTAL_HEIGHT 64
-#define PORTAL_WIDTH  32
-#define BALL_DIM 32
+#ifndef __HEADER_H_
+#define __HEADER_H_
+const int  SCREEN_WIDTH = 800;
+const int  SCREEN_HEIGHT = 600;
+const int  PLAYER_HEIGHT = 128;
+const int  PLAYER_WIDTH  = 32;
+const int  PORTAL_HEIGHT = 64;
+const int  PORTAL_WIDTH  = 32;
+const int  BALL_DIM = 32;
+#endif 

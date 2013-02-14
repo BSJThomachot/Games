@@ -1,7 +1,24 @@
 // definition of the Portal class
-#pragma once
+#ifndef __PORTAl_H_
+#define __PORTAL_H_
 #include <SFML/Graphics.hpp> 
 #include "Ball.h"
+
+namespace portalpong
+{
+
+// Types of Portal
+enum PortalType
+{
+	MOVE,
+	INVERSE,
+	SMALL,
+	BIG,
+	FAST,
+
+	COUNT
+};
+
 class Portal
 {
 public:
@@ -9,20 +26,9 @@ public:
 	Portal(sf::Texture& texture, float x, float y, int width, int height);
 	~Portal(void);
 
-	// Types of Portal
-	enum PortalType
-	{
-		MOVE,
-		INVERSE,
-		SMALL,
-		BIG,
-		FAST,
-
-		COUNT
-	};
 	// getters and setters
 	void SetPosition(float x, float y);
-	void SetPosition(sf::Vector2f& vPos);
+	void SetPosition(const sf::Vector2f& vPos);
 	sf::Vector2f GetPosition(void);
 	void SetWidth(int w);
 	int GetWidth(void);
@@ -39,25 +45,28 @@ public:
 	bool Intersects(Ball * ball);
 
 	void Draw(sf::RenderWindow * window);
-	void Update(Ball * ball, float dt);
+	void Update(Ball * ball);
 
 private:
 	// coordinates
-	float m_fX;
-	float m_fY;
+	float m_x;
+	float m_y;
 	// dimensions
-	int m_fWidth;
-	int m_fHeight;
+	int m_width;
+	int m_height;
 	// sprite of the portal
 	sf::Sprite m_sprite;
 	// the other portal linked to it
-	Portal * m_pOther;
+	Portal * m_other;
 	// the type of the portal
-	PortalType eType;
+	PortalType m_type;
 
-	bool m_bActive;
-	bool m_bReady;
+	bool m_active;
+	bool m_ready;
 
 
 };
 
+}
+
+#endif 

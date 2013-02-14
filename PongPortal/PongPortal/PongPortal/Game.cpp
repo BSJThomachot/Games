@@ -1,41 +1,43 @@
 #include "Game.h"
 #include <ctime> 
 
+using namespace portalpong;
+
 // Constuctor
 Game::Game(void)
 {
-	this->m_bPaused = false;
-	this->m_bInitialised = false;
-	this->m_fPortalOFF = 3; // portal will be off for 3 seconds
-	this->m_fPortalON = 6; // portal will be on for 6 seconds
-	this->Timer = this->m_fPortalON;
+	m_paused = false;
+	m_initialised = false;
+	m_portalOFF = 3; // portal will be off for 3 seconds
+	m_portalON = 6; // portal will be on for 6 seconds
+	m_timer = m_portalON;
 	// seed the random function
-	srand(time(0));
+	srand((unsigned int)time(NULL));
 }
 
 // destuctor
 Game::~Game(void)
 {
-	if (this->m_bInitialised)
+	if (m_initialised)
 	{
-		delete this->m_pPortalB;
-		delete this->m_pPortalA;
-		delete this->m_pBall;
-		delete this->m_pPlayer2;
-		delete this->m_pPlayer1;
+		delete m_portalB;
+		delete m_portalA;
+		delete m_ball;
+		delete m_player2;
+		delete m_player1;
 	}
 }
 
 // pause/unpause
 void Game::Pause(bool val)
 {
-	this->m_bPaused = val;
+	m_paused = val;
 }
 
 // is the game paused? 
 bool Game::isPaused(void)
 {
-	return this->m_bPaused;
+	return m_paused;
 }
 
 // set up the game
@@ -43,39 +45,39 @@ void Game::SetUP(sf::Texture& texturePlayer, sf::Texture& textureBall, sf::Textu
 {
 	// The players
 	int players = 1;
-	this->m_pPlayer1 = new Player(texturePlayer,0,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,PLAYER_HEIGHT,font,players);
+	m_player1 = new Player( texturePlayer, 0, SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2, PLAYER_WIDTH, PLAYER_HEIGHT, font,players);
 	++players;
-	this->m_pPlayer2 = new Player(texturePlayer,SCREEN_WIDTH - PLAYER_WIDTH,SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2,PLAYER_WIDTH,128,font,players);
+	m_player2 = new Player( texturePlayer, SCREEN_WIDTH - PLAYER_WIDTH, SCREEN_HEIGHT/2 - PLAYER_HEIGHT/2, PLAYER_WIDTH, PLAYER_HEIGHT, font,players);
 	// The Ball
-	this->m_pBall = new Ball(textureBall,SCREEN_WIDTH/2,SCREEN_HEIGHT/2,BALL_DIM);
+	m_ball = new Ball( textureBall, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, (float)BALL_DIM);
 	// The Portals
-	this->m_pPortalA = new Portal(texturePortalA, SCREEN_WIDTH/3*2, SCREEN_HEIGHT/3*2, PORTAL_WIDTH, PORTAL_HEIGHT);
-	this->m_pPortalB = new Portal(texturePortalB, SCREEN_WIDTH/3*2, SCREEN_HEIGHT/3*2, PORTAL_WIDTH, PORTAL_HEIGHT);
-	this->m_pPortalA->SetPosition((float)(SCREEN_WIDTH/4 + rand()%(SCREEN_WIDTH/2)),(float)(SCREEN_HEIGHT/4 + rand()%(SCREEN_HEIGHT/2)));
-	this->m_pPortalB->SetPosition((float)(SCREEN_WIDTH/4 + rand()%(SCREEN_WIDTH/2)),(float)(SCREEN_HEIGHT/4 + rand()%(SCREEN_HEIGHT/2)));
-	this->m_pPortalA->Pair(this->m_pPortalB);
-	this->m_pPortalB->Pair(this->m_pPortalA);
+	m_portalA = new Portal(texturePortalA, SCREEN_WIDTH/3*2, SCREEN_HEIGHT/3*2, PORTAL_WIDTH, PORTAL_HEIGHT);
+	m_portalB = new Portal(texturePortalB, SCREEN_WIDTH/3*2, SCREEN_HEIGHT/3*2, PORTAL_WIDTH, PORTAL_HEIGHT);
+	m_portalA->SetPosition((float)(SCREEN_WIDTH/4 + rand()%(SCREEN_WIDTH/2)), (float)(SCREEN_HEIGHT/4 + rand()%(SCREEN_HEIGHT/2)));
+	m_portalB->SetPosition((float)(SCREEN_WIDTH/4 + rand()%(SCREEN_WIDTH/2)), (float)(SCREEN_HEIGHT/4 + rand()%(SCREEN_HEIGHT/2)));
+	m_portalA->Pair(m_portalB);
+	m_portalB->Pair(m_portalA);
 	// set up text
-	this->m_Pause = sf::Text("PAUSE",font);
-	this->m_Pause.setPosition(SCREEN_WIDTH/2,SCREEN_HEIGHT/2);
+	m_pause = sf::Text("PAUSE",font);
+	m_pause.setPosition(SCREEN_WIDTH/2,SCREEN_HEIGHT/2);
 	// Game is now initialised
-	this->m_bInitialised = true;
+	m_initialised = true;
 }
 
 // Draw game
 void Game::Draw(sf::RenderWindow * window)
 {
-	if (this->m_bInitialised && !this->m_bPaused)
+	if (m_initialised && !m_paused)
 	{
-		this->m_pPlayer1->Draw(window);
-		this->m_pPlayer2->Draw(window);
-		this->m_pBall->Draw(window);
-		this->m_pPortalA->Draw(window);
-		this->m_pPortalB->Draw(window);
+		m_player1->Draw(window);
+		m_player2->Draw(window);
+		m_ball->Draw(window);
+		m_portalA->Draw(window);
+		m_portalB->Draw(window);
 	}
-	else if (this->m_bPaused) // game is paused
+	else if (m_paused) // game is paused
 	{
-		window->draw(this->m_Pause);
+		window->draw(m_pause);
 	}
 }
 
@@ -85,45 +87,45 @@ void Game::Update(bool up1, bool down1, bool up2, bool down2, bool space,  bool 
 	// toggle pause
 	if (space && !spaceJustPressed)
 	{
-		this->m_bPaused = !this->m_bPaused;
+		m_paused = !m_paused;
 	}
 
-	if (this->m_bInitialised && !this->m_bPaused)
+	if (m_initialised && !m_paused)
 	{	
 		// update players
-		this->m_pPlayer1->Update(up1,down1,dt);
-		this->m_pPlayer2->Update(up2,down2,dt);
+		m_player1->Update( up1, down1, dt);
+		m_player2->Update( up2, down2, dt);
 		// update ball
-		this->m_pBall->Update(this->m_pPlayer1,this->m_pPlayer2,dt);
+		m_ball->Update( m_player1, m_player2, dt);
 		// update portals
-		this->m_pPortalA->Update(this->m_pBall,dt);
-		this->m_pPortalB->Update(this->m_pBall,dt);
+		m_portalA->Update(m_ball);
+		m_portalB->Update(m_ball);
 
-		this->Timer -= dt;
+		m_timer -= dt;
 
-		if (this->m_pPortalA->IsActive() && this->m_pPortalB->IsActive())
+		if (m_portalA->IsActive() && m_portalB->IsActive())
 		{
-			if (this->Timer <= 0) // time out, stop portal
+			if (m_timer <= 0) // time out, stop portal
 			{
-				this->m_pPortalA->Activate(false);
-				this->m_pPortalB->Activate(false);
-				this->Timer = this->m_fPortalOFF;
+				m_portalA->Activate(false);
+				m_portalB->Activate(false);
+				m_timer = m_portalOFF;
 			}
 		}
 		else 
 		{
-			if (this->Timer <= 0) // time to set portal back On
+			if (m_timer <= 0) // time to set portal back On
 			{
-				this->m_pPortalA->Activate(true);
-				this->m_pPortalB->Activate(true);
-				this->Timer = this->m_fPortalON;
+				m_portalA->Activate(true);
+				m_portalB->Activate(true);
+				m_timer = m_portalON;
 				// pick another positions (around the centre)
-				this->m_pPortalA->SetPosition((float)(SCREEN_WIDTH/4 + rand()%(SCREEN_WIDTH/2)),(float)(SCREEN_HEIGHT/4 + rand()%(SCREEN_HEIGHT/2)));
-				this->m_pPortalB->SetPosition((float)(SCREEN_WIDTH/4 + rand()%(SCREEN_WIDTH/2)),(float)(SCREEN_HEIGHT/4 + rand()%(SCREEN_HEIGHT/2)));
-				Portal::PortalType type = (Portal::PortalType)(rand() % Portal::PortalType::COUNT);
+				m_portalA->SetPosition((float)(SCREEN_WIDTH/4 + rand()%(SCREEN_WIDTH/2)), (float)(SCREEN_HEIGHT/4 + rand()%(SCREEN_HEIGHT/2)));
+				m_portalB->SetPosition((float)(SCREEN_WIDTH/4 + rand()%(SCREEN_WIDTH/2)), (float)(SCREEN_HEIGHT/4 + rand()%(SCREEN_HEIGHT/2)));
+				PortalType type = (PortalType)(rand() % COUNT);
 				// set the other portal to the same type! 
-				this->m_pPortalA->SetType(type);
-				this->m_pPortalB->SetType(type);
+				m_portalA->SetType(type);
+				m_portalB->SetType(type);
 
 			}
 		}

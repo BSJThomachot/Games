@@ -1,10 +1,13 @@
 // definition of the game class
-#pragma once
+#ifndef __GAME_H_
+#define __GAME_H_
 #include <SFML/Graphics.hpp>
-#include "Misc.h"
 #include "Player.h"
 #include "Ball.h"
 #include "Portal.h"
+
+namespace portalpong
+{
 
 class Game
 {
@@ -22,24 +25,28 @@ public:
 private:
 
 	// Players
-	Player * m_pPlayer1;
-	Player * m_pPlayer2;
+	Player * m_player1;
+	Player * m_player2;
 	// Ball 
-	Ball * m_pBall;
+	Ball * m_ball;
 	// Portals
-	Portal * m_pPortalA;
-	Portal * m_pPortalB;
+	Portal * m_portalA;
+	Portal * m_portalB;
 
 	// has the game been initialised
-	bool m_bInitialised;
+	bool m_initialised;
 	// is the game paused?
-	bool m_bPaused;
+	bool m_paused;
 	// Pause text
-	sf::Text m_Pause;
+	sf::Text m_pause;
 	// duration of the portals
-	float m_fPortalOFF;
-	float m_fPortalON;
+	float m_portalOFF;
+	float m_portalON;
 	// a timer
-	float Timer;
+	float m_timer;
 };
+
+}
+
+#endif 
 

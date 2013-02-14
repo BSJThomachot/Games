@@ -1,25 +1,29 @@
 // Definition of the Player class
-#pragma once
+#ifndef __PLAYER_H_
+#define __PLAYER_H_
 #include "Misc.h"
 #include <SFML/Graphics.hpp>
+
+namespace portalpong
+{
 
 class Player
 {
 private:
 	// coordinates
-	float m_fX;
-	float m_fY;
+	float m_x;
+	float m_y;
 	// dimensions
-	int m_fWidth;
-	int m_fHeight;
+	int m_width;
+	int m_height;
 	// sprite of the player
 	sf::Sprite m_sprite;
 	// Speed of the player
-	float m_fSpeed;
+	float m_speed;
 	// score of the player
-	int m_iScore;
+	int m_score;
 	// player's info
-	sf::Text m_Info;
+	sf::Text m_info;
 
 public:
 	Player(void);
@@ -28,7 +32,7 @@ public:
 
 	// getters and setters
 	void SetPosition(float x, float y);
-	void SetPosition(sf::Vector2f& vPos);
+	void SetPosition(sf::Vector2f vPos);
 	sf::Vector2f GetPosition(void);
 	void SetWidth(int w);
 	int GetWidth(void);
@@ -43,3 +47,6 @@ public:
 
 };
 
+}
+
+#endif
