@@ -19,6 +19,8 @@ enum PortalType
 	COUNT
 };
 
+// class Ball;
+
 class Portal
 {
 public:

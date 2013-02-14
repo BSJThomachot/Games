@@ -3,7 +3,7 @@
 #include <SFML/System.hpp>
 #include "Game.h"
 
-using namespace protalpong;
+using namespace portalpong;
 
 int main()
 {
