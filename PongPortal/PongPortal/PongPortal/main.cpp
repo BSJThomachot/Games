@@ -38,23 +38,21 @@ int main()
 		return EXIT_SUCCESS;
 	}
 	
-	// Create game
+	
 	Game * PongGame = new Game();
 	PongGame->SetUP(texturePlayer,textureBall,texturePortal1,texturePortal2,font);
 
 	// keys to press
-	bool bUpPressed			= false;
-	bool bDownPressed		= false;
-	bool bWPressed			= false;
-	bool bSPressed			= false;
-	bool bSpacePressed		= false;
-	bool bSpaceJustPressed  = false;
+	bool UpPressed			= false;
+	bool DownPressed		= false;
+	bool WPressed			= false;
+	bool SPressed			= false;
+	bool SpacePressed		= false;
+	bool SpaceJustPressed  = false;
 
-	// The Game's clock
 	sf::Clock clock;
 	while (window.isOpen())
 	{	
-		// get delta time
 		sf::Time dt = clock.restart();
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -68,23 +66,23 @@ int main()
 			{
 				if (event.key.code == sf::Keyboard::Up)
 				{
-					bUpPressed = true;
+					UpPressed = true;
 				}
 				if (event.key.code == sf::Keyboard::Down)
 				{
-					bDownPressed = true;
+					DownPressed = true;
 				}
 				if (event.key.code == sf::Keyboard::W)
 				{
-					bWPressed = true;
+					WPressed = true;
 				}
 				if (event.key.code == sf::Keyboard::S)
 				{
-					bSPressed = true;
+					SPressed = true;
 				}
 				if (event.key.code == sf::Keyboard::Space)
 				{
-					bSpacePressed = true;
+					SpacePressed = true;
 				}
 			}
 			// check key release
@@ -92,38 +90,35 @@ int main()
 			{
 				if (event.key.code == sf::Keyboard::Up)
 				{
-					bUpPressed = false;
+					UpPressed = false;
 				}
 				if (event.key.code == sf::Keyboard::Down)
 				{
-					bDownPressed = false;
+					DownPressed = false;
 				}
 				if (event.key.code == sf::Keyboard::W)
 				{
-					bWPressed = false;
+					WPressed = false;
 				}
 				if (event.key.code == sf::Keyboard::S)
 				{
-					bSPressed = false;
+					SPressed = false;
 				}
 				if (event.key.code == sf::Keyboard::Space)
 				{
-					bSpacePressed = false;
+					SpacePressed = false;
 				}
 			}
 		}
-		// update PongGame
-		PongGame->Update(bUpPressed,bDownPressed,bWPressed,bSPressed,bSpacePressed,bSpaceJustPressed,dt.asSeconds());
-		// clear window
+		PongGame->Update(UpPressed,DownPressed,WPressed,SPressed,SpacePressed,SpaceJustPressed,dt.asSeconds());
 		window.clear(sf::Color(0,0,0,255));
 		PongGame->Draw(&window);
 		window.display();
 		
 		// stop space repetition
-		bSpaceJustPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+		SpaceJustPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 	}
 
-	// clean up
 	delete PongGame;
 
 	return EXIT_SUCCESS;

@@ -1,5 +1,6 @@
 #include "Entity.h"
 
+using namespace helicopter;
 
 Entity::Entity(void)
 {
@@ -7,9 +8,9 @@ Entity::Entity(void)
 
 Entity::Entity(sf::Texture& texture, float x, float y, float width, float height)
 {
-	m_img = sf::Sprite(texture);
+	m_image = sf::Sprite(texture);
 	SetPosition(x,y);
-	m_img.setPosition(x,y);
+	m_image.setPosition(x,y);
 	m_width = width;
 	m_height = height;
 }
@@ -24,6 +25,7 @@ void Entity::SetPosition(float x, float y)
 	m_y = y;
 	m_position.x = x;
 	m_position.y = y;
+	m_image.setPosition(x,y);
 }
 
 void Entity::SetPosition(const sf::Vector2f& Pos)
@@ -32,6 +34,7 @@ void Entity::SetPosition(const sf::Vector2f& Pos)
 	m_y = Pos.y;
 	m_position.x = Pos.x;
 	m_position.y = Pos.y;
+	m_image.setPosition(Pos);
 }
 
 sf::Vector2f Entity::GetPosition(void)
@@ -41,12 +44,12 @@ sf::Vector2f Entity::GetPosition(void)
 
 void Entity::SetSprite(sf::Sprite sprite)
 {
-	m_img = sprite;
+	m_image = sprite;
 }
 
 sf::Sprite Entity::GetSprite(void)
 {
-	return m_img;
+	return m_image;
 }
 
 void Entity::SetWidth(float w)
@@ -71,5 +74,5 @@ float Entity::GetHeight(void)
 
 void Entity::Draw(sf::RenderWindow * window)
 {
-	window->draw(m_img);
+	window->draw(m_image);
 }

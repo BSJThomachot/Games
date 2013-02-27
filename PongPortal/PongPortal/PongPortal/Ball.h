@@ -13,7 +13,7 @@ public:
 	Ball(void);
 	Ball(sf::Texture& texture, float x, float y, float radius);
 	~Ball(void);
-	// getters and setters
+	
 	void SetPosition(float x, float y);
 	void SetPosition(const sf::Vector2f& vPos);
 	sf::Vector2f GetPosition(void);
@@ -36,30 +36,21 @@ public:
 	void Update(Player * p1, Player * p2, float dt);
 
 private:
-	// coordinates
+	
 	float m_x;
 	float m_y;
-	// direction
 	int m_dirX;
 	int m_dirY;
-	// speed
 	float m_speed;
-	// scale
 	float m_scale;
 
-	// radius
 	float m_dimension;
-	// sprite of the ball
 	sf::Sprite m_sprite;
-	// is warpping
 	bool m_warpping;
-	// is colliding
 	bool m_colliding;
 
 	bool m_inGame;
-	// a timer
 	float m_timer;
-	// Time info
 	sf::Text m_timerText;
 };
 

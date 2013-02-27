@@ -1,16 +1,17 @@
 #include "Player.h"
 
+using namespace helicopter;
 
 Player::Player(void)
 {
-	// initialise velocity
-	m_velX = 0;
-	m_velY = 0;
+	m_velocityX = 0;
+	m_velocityY = 0;
 }
 
 Player::Player(sf::Texture& texture, float x, float y, float width, float height) : Entity(texture,x,y,width,height)
 {
-
+	m_velocityX = 0;
+	m_velocityY = 0;
 }
 
 Player::~Player(void)
@@ -18,14 +19,15 @@ Player::~Player(void)
 
 }
 
-void Player::Update(float dt)
+void Player::Update(float dt, bool up)
 {
-	// get current position
 	sf::Vector2f pos = GetPosition();
-
-	// update position
-	sf::Vector2f newPos;
-	newPos.x += m_velX*dt;
-	newPos.y += m_velY*dt;
-
+	
+	m_velocityY += 4.9f * dt * dt;
+	if (up)
+	{
+		m_velocityY -= 50.0f * dt * dt;
+	}
+	pos.y += m_velocityY;
+	SetPosition(pos.x,pos.y);
 }

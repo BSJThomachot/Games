@@ -2,12 +2,11 @@
 
 using namespace portalpong;
 
-// default constructor
 Ball::Ball(void)
 {
 }
 
-// constructor
+
 Ball::Ball(sf::Texture& texture, float x, float y, float radius)
 {
 	m_sprite = sf::Sprite(texture);
@@ -28,101 +27,101 @@ Ball::Ball(sf::Texture& texture, float x, float y, float radius)
 
 }
 
-// destructor
+
 Ball::~Ball(void)
 {
 }
 
-// set position with x and y
+
 void Ball::SetPosition(float x, float y)
 {
 	m_x = x;
 	m_y = y;
 }
 
-// set position with a vector
+
 void Ball::SetPosition(const sf::Vector2f& vPos)
 {
 	m_x = vPos.x;
 	m_y = vPos.y;
 }
 
-// get position
+
 sf::Vector2f Ball::GetPosition(void)
 {
 	return sf::Vector2f( m_x, m_y);
 }
 
-// set direction with x and y 
+
 void Ball::SetDirection( int x, int y)
 {
 	m_dirX = x;
 	m_dirY = y;
 }
 
-// set direction with a vector
+
 void Ball::SetDirection(sf::Vector2i vDir)
 {
 	m_dirX = vDir.x;
 	m_dirY = vDir.y;
 }
 
-// get direction
+
 sf::Vector2i Ball::GetDirection(void)
 {
 	return sf::Vector2i( m_dirX, m_dirY);
 }
 
-// set speed
+
 void Ball::SetSpeed(float s)
 {
 	m_speed = s;
 }
 
-// get speed
+
 float Ball::GetSpeed(void)
 {
 	return m_speed;
 }
 
-// set dimension
+
 void Ball::SetDim(float value)
 {
 	m_dimension = value;
 }
 
-// get dimension of the ball
+
 float Ball::GetDim(void)
 {
 	return m_dimension * m_scale;
 }
 
-// Set Scale
+
 void Ball::SetScale(float s)
 {
 	m_sprite.setScale(s,s);
 	m_scale = s;
 }
 
-// get Scale
+
 float Ball::GetScale(void)
 {
 	return m_scale;
 }
 
-// warp or not the ball
+
 void Ball::Warpping(bool val)
 {
 	m_warpping = val;
 }
 
-// is the ball being warpped?
+
 bool Ball::IsWarpping(void)
 {
 	return m_warpping;
 }
 
-// check if intersects with player
+
 bool Ball::Intersects(Player * p)
 {
 	return !((p->GetPosition().x > this->m_x + this->GetDim())
@@ -131,22 +130,18 @@ bool Ball::Intersects(Player * p)
 			||(p->GetPosition().y + p->GetHeight() < this->m_y));
 }
 
-// launch the ball
+
 void Ball::Launch(void)
 {	
 	// back in the game!
 	m_inGame = true;
-	// reset timer
 	m_timer = 3;
-	// reset speed
 	m_speed = 200.0f;
 }
 
-// Draw the ball
 void Ball::Draw(sf::RenderWindow * window)
 {
 	window->draw(m_sprite);
-	// draw countdown when appropriate
 	if (!m_inGame)
 	{
 		window->draw(m_timerText);
@@ -227,14 +222,12 @@ void Ball::Update(Player * p1, Player * p2, float dt)
 		sprintf_s(buf,32,"%i",second);
 		m_timerText.setString(sf::String(buf));
 		m_timerText.setPosition( SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-		// countdown over!
 		if (m_timer < 0)
 		{
 			Launch();
 		}
 	}
 
-	// set m_sprite
 	m_sprite.setPosition( m_x, m_y);
 
 }

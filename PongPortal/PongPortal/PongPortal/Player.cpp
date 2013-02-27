@@ -2,13 +2,12 @@
 
 using namespace portalpong;
 
-// empty constructor
 Player::Player(void)
 {
 
 }
 
-// constructor
+
 Player::Player(sf::Texture& texture, float x, float y, int width, int height, sf::Font& font, int id)
 {
 	m_sprite = sf::Sprite(texture);
@@ -22,7 +21,6 @@ Player::Player(sf::Texture& texture, float x, float y, int width, int height, sf
 	m_speed = 250;
 }
 
-// destructor
 Player::~Player(void)
 {
 }
@@ -83,13 +81,10 @@ int Player::GetScore(void)
 
 void Player::Draw(sf::RenderWindow * window)
 {
-	// printing player's sprite
 	window->draw(m_sprite);
-	// then info
 	window->draw(m_info);
 }
 
-// update player
 void Player::Update(bool up, bool down, float dt)
 {
 	if (up)
@@ -108,6 +103,5 @@ void Player::Update(bool up, bool down, float dt)
 			m_y = (float)(SCREEN_HEIGHT - m_height);
 		}
 	}
-	// adjust sprite position
 	m_sprite.setPosition(GetPosition());
 }

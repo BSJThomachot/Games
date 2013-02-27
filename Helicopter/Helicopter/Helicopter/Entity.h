@@ -1,5 +1,10 @@
-#pragma once
+#ifndef __ENTITY_H_
+#define __ENTITY_H_
 #include <SFML/Graphics.hpp>
+
+namespace helicopter
+{
+
 class Entity
 {
 public:
@@ -7,7 +12,6 @@ public:
 	Entity(sf::Texture& texture, float x, float y, float width, float height);
 	virtual ~Entity(void);
 
-	// getters and setters
 	void SetPosition(float x, float y);
 	void SetPosition(const sf::Vector2f& Pos);
 	sf::Vector2f GetPosition(void);
@@ -21,14 +25,14 @@ public:
 	void Draw(sf::RenderWindow * window);
 
 private:
-	// coordinates of the entity
+
 	float m_x;
 	float m_y;
 	sf::Vector2f m_position;
-	// image of the Entity
-	sf::Sprite m_img;
-	// dimension of the Entity
+	sf::Sprite m_image;
 	float m_width;
 	float m_height;
 };
+}
+#endif
 

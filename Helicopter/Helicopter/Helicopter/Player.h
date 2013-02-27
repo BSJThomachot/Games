@@ -1,5 +1,10 @@
-#pragma once
-#include "entity.h"
+#ifndef __PLAYER_H_
+#define __PLAYER_H_
+#include "Entity.h"
+
+namespace helicopter
+{
+
 class Player : public Entity
 {
 public:
@@ -7,12 +12,14 @@ public:
 	Player(sf::Texture& texture, float x, float y, float width, float height);
 	~Player(void);
 
-	void Update(float dt);
+	void Update(float dt, bool up);
 
 private:
-	// velocity of the player
-	float m_velX;
-	float m_velY;
+	float m_velocityX;
+	float m_velocityY;
 	sf::Vector2f m_velocity;
 };
+
+}
+#endif
 
