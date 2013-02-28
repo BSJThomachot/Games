@@ -8,7 +8,7 @@ using namespace helicopter;
 int main()
 {
 	// SFML window
-	sf::RenderWindow window(sf::VideoMode(1024,768), "Helicopter");
+	sf::RenderWindow window(sf::VideoMode(800,600), "Helicopter");
 
 	// texture for Player (a ball for now
 	sf::Texture textureBall;

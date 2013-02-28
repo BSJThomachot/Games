@@ -23,11 +23,11 @@ void Player::Update(float dt, bool up)
 {
 	sf::Vector2f pos = GetPosition();
 	
-	m_velocityY += 4.9f * dt * dt;
+	m_velocityY += 4.9f * dt * dt; // 9.8 / 2
 	if (up)
 	{
-		m_velocityY -= 50.0f * dt * dt;
+		m_velocityY -= 9.8f * dt * dt;
 	}
-	pos.y += m_velocityY;
+	pos.y += m_velocityY*50.0f;
 	SetPosition(pos.x,pos.y);
 }
