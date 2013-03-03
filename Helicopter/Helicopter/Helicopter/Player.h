@@ -18,6 +18,8 @@ private:
 	float m_velocityX;
 	float m_velocityY;
 	sf::Vector2f m_velocity;
+
+	float m_distance;
 };
 
 }

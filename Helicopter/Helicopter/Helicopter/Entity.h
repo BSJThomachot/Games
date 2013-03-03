@@ -22,7 +22,10 @@ public:
 	void SetHeight(float h);
 	float GetHeight(void);
 
+	bool Collides(Entity * other);
+	
 	void Draw(sf::RenderWindow * window);
+
 
 private:
 

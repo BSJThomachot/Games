@@ -128,10 +128,16 @@ void Portal::Warp(Ball * ball)
 // check if a ball is in the portal
 bool Portal::Intersects(Ball * ball)
 {
-	return !((ball->GetPosition().x > m_x + m_width)
-			||(ball->GetPosition().x + ball->GetDim() < m_x)
-			||(ball->GetPosition().y > m_y + m_height)
-			||(ball->GetPosition().y + ball->GetDim() < m_y));
+	if (m_x > ball->GetPosition().x + ball->GetDim() || ball->GetPosition().x > m_x + m_width)
+	{
+		return false;
+	}
+	if (m_y > ball->GetPosition().y + ball->GetDim()  || ball->GetPosition().y > m_y + m_height)
+	{
+		return false;
+	}
+	
+	return true;
 }
 
 void Portal::Draw(sf::RenderWindow * window)

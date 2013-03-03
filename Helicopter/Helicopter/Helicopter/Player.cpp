@@ -29,5 +29,6 @@ void Player::Update(float dt, bool up)
 		m_velocityY -= 9.8f * dt * dt;
 	}
 	pos.y += m_velocityY*50.0f;
+	pos.x += dt*50.0f;
 	SetPosition(pos.x,pos.y);
 }

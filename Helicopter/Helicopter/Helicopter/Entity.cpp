@@ -72,6 +72,20 @@ float Entity::GetHeight(void)
 	return m_height;
 }
 
+bool Entity::Collides(Entity * other)
+{
+	if (m_x > other->GetPosition().x + other->GetWidth() || other->GetPosition().x > m_x + m_width)
+	{
+		return false;
+	}
+	if (m_y > other->GetPosition().y + other->GetHeight() || other->GetPosition().y > m_y + m_height)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void Entity::Draw(sf::RenderWindow * window)
 {
 	window->draw(m_image);

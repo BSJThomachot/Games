@@ -124,10 +124,16 @@ bool Ball::IsWarpping(void)
 
 bool Ball::Intersects(Player * p)
 {
-	return !((p->GetPosition().x > this->m_x + this->GetDim())
-			||(p->GetPosition().x + p->GetWidth() < this->m_x)
-			||(p->GetPosition().y > this->m_y + this->GetDim())
-			||(p->GetPosition().y + p->GetHeight() < this->m_y));
+	if (m_x > p->GetPosition().x + p->GetWidth() || p->GetPosition().x > m_x + m_dimension)
+	{
+		return false;
+	}
+	if (m_y > p->GetPosition().y + p->GetHeight() || p->GetPosition().y > m_y + m_dimension)
+	{
+		return false;
+	}
+	
+	return true;
 }
 
 

@@ -10,15 +10,30 @@ int main()
 	// SFML window
 	sf::RenderWindow window(sf::VideoMode(800,600), "Helicopter");
 
-	// texture for Player (a ball for now
-	sf::Texture textureBall;
-    if (!textureBall.loadFromFile("Images/Ball.png"))
+	// texture for Player
+	sf::Texture texturePlayer;
+    if (!texturePlayer.loadFromFile("Images/CopterRescue.png"))
+	{
+		return EXIT_SUCCESS;
+	}
+	sf::Texture textureBuilding;
+    if (!textureBuilding.loadFromFile("Images/Building.png"))
+	{
+		return EXIT_SUCCESS;
+	}
+	sf::Texture textureMotherShip;
+    if (!textureMotherShip.loadFromFile("Images/MotherShip.png"))
+	{
+		return EXIT_SUCCESS;
+	}
+	sf::Texture textureCannon;
+    if (!textureCannon.loadFromFile("Images/Cannon.png"))
 	{
 		return EXIT_SUCCESS;
 	}
 
 	Game * CopterGame = new Game();
-	CopterGame->SetUp(textureBall);
+	CopterGame->SetUp(texturePlayer,textureBuilding,textureMotherShip,textureCannon);
 
 	bool UpPressed = false;
 
