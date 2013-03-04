@@ -24,25 +24,19 @@ public:
 
 private:
 
-	// Players
+
 	Player * m_player1;
 	Player * m_player2;
-	// Ball 
 	Ball * m_ball;
-	// Portals
 	Portal * m_portalA;
 	Portal * m_portalB;
 
-	// has the game been initialised
 	bool m_initialised;
-	// is the game paused?
 	bool m_paused;
-	// Pause text
 	sf::Text m_pause;
 	// duration of the portals
 	float m_portalOFF;
 	float m_portalON;
-	// a timer
 	float m_timer;
 };
 

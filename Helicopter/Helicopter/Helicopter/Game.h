@@ -13,9 +13,9 @@ public:
 	Game(void);
 	~Game(void);
 
-	void SetUp(sf::Texture& texturePlayer, sf::Texture& textureBuilding, sf::Texture textureMotherShip, sf::Texture textureCannon);
+	void SetUp(sf::Font& font, sf::Texture& texturePlayer, sf::Texture& textureBuilding, sf::Texture& textureMotherShip, sf::Texture& textureCannon, sf::Texture& textureUFO);
 
-	void Update(float dt, bool up);
+	void Update(float dt, bool up, bool space, bool justSpace);
 	void Draw(sf::RenderWindow * window);
 
 private:
@@ -24,7 +24,11 @@ private:
 
 	sf::View m_camera;
 
+	sf::Text m_info;
+
 	bool m_initialsed;
+
+	bool m_paused;
 	
 };
 

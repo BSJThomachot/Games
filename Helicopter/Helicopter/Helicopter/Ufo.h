@@ -9,7 +9,10 @@ class Ufo : public Entity
 {
 public:
 	Ufo(void);
+	Ufo(sf::Texture& texture, float x, float y, float width, float height);
 	~Ufo(void);
+
+	void Update(float dt);
 };
 
 }
