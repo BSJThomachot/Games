@@ -13,7 +13,7 @@ public:
 	Game(void);
 	~Game(void);
 
-	void SetUp(sf::Font& font, sf::Texture& texturePlayer, sf::Texture& textureBuilding, sf::Texture& textureMotherShip, sf::Texture& textureCannon, sf::Texture& textureUFO);
+	void SetUp(sf::Font& font, sf::Texture& texturePlayer, sf::Texture& textureBuilding, sf::Texture& textureMotherShip, sf::Texture& textureCannon, sf::Texture& textureUFO, sf::Texture& textureLaser);
 
 	void Update(float dt, bool up, bool space, bool justSpace);
 	void Draw(sf::RenderWindow * window);
@@ -29,6 +29,7 @@ private:
 	bool m_initialsed;
 
 	bool m_paused;
+	// bool m_countdown;
 	
 };
 

@@ -24,8 +24,7 @@ public:
 
 	bool Collides(Entity * other);
 	
-	void Draw(sf::RenderWindow * window);
-
+	virtual void Draw(sf::RenderWindow * window);
 
 private:
 

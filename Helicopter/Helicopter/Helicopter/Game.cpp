@@ -16,13 +16,13 @@ Game::~Game(void)
 	delete m_level;
 }
 
-void Game::SetUp(sf::Font& font, sf::Texture& texturePlayer, sf::Texture& textureBuilding, sf::Texture& textureMotherShip, sf::Texture& textureCannon, sf::Texture& textureUFO)
+void Game::SetUp(sf::Font& font, sf::Texture& texturePlayer, sf::Texture& textureBuilding, sf::Texture& textureMotherShip, sf::Texture& textureCannon, sf::Texture& textureUFO, sf::Texture& textureLaser)
 {
 	m_info = sf::Text("PAUSE",font);
 	m_info.setPosition(400.0f,400.0f);
 	
-	m_level = new LevelMaker(textureBuilding,textureMotherShip,textureCannon,textureUFO);
-	m_player = new Player(texturePlayer,200,200,96,64);
+	m_level = new LevelMaker(textureBuilding,textureMotherShip,textureCannon,textureUFO,textureLaser);
+	m_player = new Player(texturePlayer,100,200,96,64);
 
 	m_level->SetUp();
 }
@@ -30,7 +30,7 @@ void Game::SetUp(sf::Font& font, sf::Texture& texturePlayer, sf::Texture& textur
 void Game::Draw(sf::RenderWindow * window)
 {
 	window->setView(m_camera);
-	window->clear();
+	window->clear(sf::Color(25,25,112));
 	m_level->Draw(window);
 	m_player->Draw(window);
 

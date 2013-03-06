@@ -13,6 +13,7 @@ public:
 	~Player(void);
 
 	void Update(float dt, bool up);
+	// void FlyUp(void);
 
 private:
 	float m_velocityX;
@@ -20,6 +21,7 @@ private:
 	sf::Vector2f m_velocity;
 
 	float m_distance;
+	float m_delay;
 };
 
 }

@@ -6,12 +6,14 @@ Player::Player(void)
 {
 	m_velocityX = 0;
 	m_velocityY = 0;
+	m_delay = 2;
 }
 
 Player::Player(sf::Texture& texture, float x, float y, float width, float height) : Entity(texture,x,y,width,height)
 {
 	m_velocityX = 0;
 	m_velocityY = 0;
+	m_delay = 2;
 }
 
 Player::~Player(void)
@@ -22,13 +24,19 @@ Player::~Player(void)
 void Player::Update(float dt, bool up)
 {
 	sf::Vector2f pos = GetPosition();
-	
-	m_velocityY += 4.9f * dt * dt; // 9.8 / 2
-	if (up)
+	if (m_delay > 0)
 	{
-		m_velocityY -= 9.8f * dt * dt;
+		m_delay -= dt;
 	}
-	pos.y += m_velocityY*50.0f;
+	else
+	{
+		m_velocityY += 4.9f * dt * dt; // 9.8 / 2
+		if (up)
+		{
+			m_velocityY -= 9.8f * dt * dt;
+		}
+		pos.y += m_velocityY*50.0f;
+	}
 	pos.x += dt*100.0f;
 	SetPosition(pos.x,pos.y);
 }

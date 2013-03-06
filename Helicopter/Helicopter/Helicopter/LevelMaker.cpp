@@ -17,12 +17,13 @@ LevelMaker::LevelMaker(void)
 	
 }
 
-LevelMaker::LevelMaker(sf::Texture& textureBuilding, sf::Texture& textureMotherShip, sf::Texture& textureCannon, sf::Texture& textureUFO)
+LevelMaker::LevelMaker(sf::Texture& textureBuilding, sf::Texture& textureMotherShip, sf::Texture& textureCannon, sf::Texture& textureUFO, sf::Texture& textureLaser)
 {
 	m_textureBuilding = textureBuilding;
 	m_textureMotherShip = textureMotherShip;
 	m_textureCannon = textureCannon;
 	m_textureUFO = textureUFO;
+	m_textureLaser = textureLaser;
 	m_lastXBuilding = 0;
 	m_lastXShip = 0;
 	m_lastXCannon = 0;
@@ -62,7 +63,7 @@ LevelMaker::~LevelMaker(void)
 
 	if (entities.size() > 0)
 	{
-		std::list<Entity*>::iterator iter3;
+		std::list<Enemy*>::iterator iter3;
 		for (iter3 = entities.begin(); iter3 != entities.end();)
 		{
 			delete (*iter3);
@@ -101,13 +102,14 @@ void LevelMaker::SetUp()
 void LevelMaker::Update(float dt, float edge, Player * player)
 {
 	// float a = dt;
-	std::list<Entity*>::iterator iter3;
+	std::list<Enemy*>::iterator iter3;
 	for (iter3 = entities.begin(); iter3 != entities.end();)
 	{
-		if (player->Collides((*iter3)))
-		{
+		//if (player->Collides((*iter3)))
+		//{
 			// printf("COLLIDING \n");
-		}
+		//}
+		(*iter3)->Update(dt);
 		if ((*iter3)->GetPosition().x + (*iter3)->GetWidth() <= edge)
 	 	{
 	 		delete (*iter3);
@@ -124,7 +126,7 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 	if (m_UFOTimer >= m_UFOFrequency)
 	{
 		m_UFOTimer = 0;
-		Entity * ufo = new Ufo(m_textureUFO,m_lastXBuilding,400.0f,64,32);
+		Enemy * ufo = new Ufo(m_textureUFO,m_lastXBuilding,400.0f,64,32);
 		entities.push_back(ufo);
 	}
 
@@ -132,7 +134,7 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 	if (m_CannonTimer >= m_CannonFrequency)
 	{
 		m_CannonTimer = 0;
-		Entity * cannon = new Cannon(m_textureCannon,m_lastXBuilding,64.0f,64,32);
+		Enemy * cannon = new Cannon(m_textureCannon,m_textureLaser,m_lastXBuilding,64.0f,64,32);
 		entities.push_back(cannon);
 	}
 
@@ -140,10 +142,10 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 	std::list<Entity*>::iterator iter;
 	for (iter = bottom.begin(); iter != bottom.end();)
 	{
-		if (player->Collides((*iter)))
-		{
-			// printf("COLLIDING \n");
-		}
+		//if (player->Collides((*iter)))
+		//{
+		// printf("COLLIDING \n");
+		//}
 		if ((*iter)->GetPosition().x + (*iter)->GetWidth() <= edge)
 	 	{
 	 		delete (*iter);
@@ -155,7 +157,7 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 	 		++iter;
 		}
 	}
-	// TODO Make skyline go higher and higher
+	// TODO Make skyline go higher and higher (and start low)
 	if (counter > 0)
 	{
 		Entity * building = new Entity(m_textureBuilding,m_lastXBuilding,m_lastYBuilding,64,256);
@@ -209,7 +211,7 @@ void LevelMaker::Draw(sf::RenderWindow * window)
 	{
 		(*iter2)->Draw(window);
 	}
-	std::list<Entity*>::iterator iter3;
+	std::list<Enemy*>::iterator iter3;
 	for (iter3 = entities.begin(); iter3 != entities.end(); ++iter3)
 	{
 		(*iter3)->Draw(window);

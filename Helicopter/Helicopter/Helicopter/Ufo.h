@@ -1,11 +1,11 @@
 #ifndef __UFO_H_
 #define __UFO_H_
-#include "Entity.h"
+#include "Enemy.h"
 
 namespace helicopter
 {
 
-class Ufo : public Entity
+class Ufo : public Enemy
 {
 public:
 	Ufo(void);
@@ -13,6 +13,13 @@ public:
 	~Ufo(void);
 
 	void Update(float dt);
+
+private: 
+
+	float m_originY;
+	float m_range;
+	float m_speed;
+	float m_timer;
 };
 
 }

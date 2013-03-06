@@ -41,15 +41,18 @@ int main()
 	{
 		return EXIT_SUCCESS;
 	}
+	sf::Texture textureLaser;
+    if (!textureLaser.loadFromFile("Images/Laser.png"))
+	{
+		return EXIT_SUCCESS;
+	}
 
 	Game * CopterGame = new Game();
-	CopterGame->SetUp(font,texturePlayer,textureBuilding,textureMotherShip,textureCannon,textureUFO);
+	CopterGame->SetUp(font,texturePlayer,textureBuilding,textureMotherShip,textureCannon,textureUFO,textureLaser);
 
 	bool UpPressed = false;
 	bool SpacePressed = false;
 	bool SpaceJustPressed = false;
-
-	//float lastime = 0
 
 	sf::Clock clock;
 	while (window.isOpen())
@@ -57,9 +60,6 @@ int main()
 		SpaceJustPressed = false;
 		
 		sf::Time dt = clock.restart();
-		//float fps = 1.0f / (dt.asSeconds() - lastime);
-		//printf("%f \n",fps);
-		//lastime = dt.asSeconds();
 		sf::Event event;
 		while (window.pollEvent(event))
 		{	
@@ -70,6 +70,10 @@ int main()
 			// check key press
 			if (event.type == sf::Event::KeyPressed)
 			{
+				if (event.key.code == sf::Keyboard::Escape)
+				{
+					window.close();
+				}
 				if (event.key.code == sf::Keyboard::Up)
 				{
 					UpPressed = true;
