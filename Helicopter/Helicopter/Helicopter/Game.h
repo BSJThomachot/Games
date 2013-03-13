@@ -13,9 +13,10 @@ public:
 	Game(void);
 	~Game(void);
 
-	void SetUp(sf::Font& font, sf::Texture& texturePlayer, sf::Texture& textureBuilding, sf::Texture& textureMotherShip, sf::Texture& textureCannon, sf::Texture& textureUFO, sf::Texture& textureLaser);
+	void SetUp(void);
+	void Restart(void);
 
-	void Update(float dt, bool up, bool space, bool justSpace);
+	void Update(float dt, bool up, bool space, bool justSpace, bool R, bool justR, bool returnKey);
 	void Draw(sf::RenderWindow * window);
 
 private:
@@ -25,12 +26,10 @@ private:
 	sf::View m_camera;
 
 	sf::Text m_info;
+	sf::Text m_info2;
 
-	bool m_initialsed;
-
+	bool m_started;
 	bool m_paused;
-	// bool m_countdown;
-	
 };
 
 }

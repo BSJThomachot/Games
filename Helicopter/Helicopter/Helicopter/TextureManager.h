@@ -6,7 +6,7 @@
 #include <string>
 
 namespace helicopter {
-
+// Singleton Class that stores Textures used in the game
 class TextureManager
 {
 public:

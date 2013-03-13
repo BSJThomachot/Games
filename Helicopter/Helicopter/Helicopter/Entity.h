@@ -1,5 +1,7 @@
 #ifndef __ENTITY_H_
 #define __ENTITY_H_
+#include "misc.h"
+#include "TextureManager.h"
 #include <SFML/Graphics.hpp>
 
 namespace helicopter
@@ -9,7 +11,7 @@ class Entity
 {
 public:
 	Entity(void);
-	Entity(sf::Texture& texture, float x, float y, float width, float height);
+	Entity(std::string name, float x, float y, float width, float height);
 	virtual ~Entity(void);
 
 	void SetPosition(float x, float y);

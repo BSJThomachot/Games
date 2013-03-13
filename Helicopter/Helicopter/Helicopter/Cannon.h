@@ -10,7 +10,7 @@ class Cannon : public Enemy
 {
 public:
 	Cannon(void);
-	Cannon(sf::Texture& texture, sf::Texture& TextureLaser, float x, float y, float width, float height);
+	Cannon(std::string name, float x, float y, float width, float height);
 	~Cannon(void);
 
 	void Update(float dt);
@@ -22,7 +22,7 @@ private:
 	float m_fireRate;
 	float m_timer;
 
-	sf::Texture m_textureLaser;
+	sf::Vector2f m_laserSpawn;
 
 	std::list<Laser*> lasers;
 };

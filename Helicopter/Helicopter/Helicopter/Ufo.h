@@ -9,7 +9,7 @@ class Ufo : public Enemy
 {
 public:
 	Ufo(void);
-	Ufo(sf::Texture& texture, float x, float y, float width, float height);
+	Ufo(std::string name, float x, float y, float width, float height);
 	~Ufo(void);
 
 	void Update(float dt);

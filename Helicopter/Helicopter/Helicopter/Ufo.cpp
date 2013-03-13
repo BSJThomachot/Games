@@ -4,15 +4,15 @@ using namespace helicopter;
 
 Ufo::Ufo(void)
 {
-	m_range = 100.0f;
+	m_range = (float)(rand() % 100);
 	m_speed = 25.0f;
 	m_originY = 0;
 	m_timer = 0;
 }
 
-Ufo::Ufo(sf::Texture& texture, float x, float y, float width, float height) : Enemy(texture,x,y,width,height)
+Ufo::Ufo(std::string name, float x, float y, float width, float height) : Enemy(name,x,y,width,height)
 {
-	m_range = 100.0f;
+	m_range = (float)(rand() % 100);
 	m_speed = 25.0f;
 	m_originY = y;
 	m_timer = 0;

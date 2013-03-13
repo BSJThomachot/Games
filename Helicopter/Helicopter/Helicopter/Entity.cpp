@@ -6,9 +6,9 @@ Entity::Entity(void)
 {
 }
 
-Entity::Entity(sf::Texture& texture, float x, float y, float width, float height)
+Entity::Entity(std::string name, float x, float y, float width, float height)
 {
-	m_image = sf::Sprite(texture);
+	m_image = sf::Sprite(TextureManager::GetInstance()->GetTexture(name));
 	SetPosition(x,y);
 	m_image.setPosition(x,y);
 	m_width = width;

@@ -4,40 +4,49 @@ using namespace helicopter;
 
 LevelMaker::LevelMaker(void)
 {
-	m_lastXBuilding = 0;
-	m_lastXShip = 0;
-	m_lastXCannon = 0;
 	srand((unsigned int)time(NULL));
-	m_lastYBuilding = 600.0f - (float)(rand() % 200);
-
-	m_UFOTimer = 0;
-	m_CannonTimer = 0;
-	m_UFOFrequency = 10.0f;
-	m_CannonFrequency = 5.0f;
-	
-}
-
-LevelMaker::LevelMaker(sf::Texture& textureBuilding, sf::Texture& textureMotherShip, sf::Texture& textureCannon, sf::Texture& textureUFO, sf::Texture& textureLaser)
-{
-	m_textureBuilding = textureBuilding;
-	m_textureMotherShip = textureMotherShip;
-	m_textureCannon = textureCannon;
-	m_textureUFO = textureUFO;
-	m_textureLaser = textureLaser;
-	m_lastXBuilding = 0;
-	m_lastXShip = 0;
-	m_lastXCannon = 0;
-	srand((unsigned int)time(NULL));
-	m_lastYBuilding = 600.0f - (float)(rand() % 200);
-
-	m_UFOTimer = 0;
-	m_CannonTimer = 0;
-	m_UFOFrequency = 10.0f;
-	m_CannonFrequency = 5.0f;
 }
 
 
 LevelMaker::~LevelMaker(void)
+{
+	ClearLists();
+}
+
+void LevelMaker::SetUp()
+{
+	m_lastXBuilding = 0;
+	m_lastXShip = 0;
+	m_lastXCannon = 0;
+	m_skylineHeight = 50;
+	m_lastYBuilding = 600.0f - m_skylineHeight;
+
+	m_level = 1;
+
+	m_UFOTimer = 0;
+	m_CannonTimer = 0;
+	m_UFOFrequency = 10.0f;
+	m_CannonFrequency = 5.0f;
+
+	ClearLists();
+
+	int i;
+	for (i = 0; i < 15; ++i)
+	{
+		Entity * building = new Entity("Building",m_lastXBuilding,m_lastYBuilding,64,256);
+		bottom.push_back(building);
+		m_lastXBuilding += building->GetWidth();
+	}
+	for (i = 0; i < 3; ++i)
+	{
+		Entity * ship = new Entity("MotherShip",m_lastXShip,0,512,64);
+		top.push_back(ship);
+		m_lastXShip += ship->GetWidth();
+	}
+}
+
+
+void LevelMaker::ClearLists()
 {
 	if (bottom.size() > 0)
 	{
@@ -52,68 +61,105 @@ LevelMaker::~LevelMaker(void)
 
 	if (top.size() > 0)
 	{
-		std::list<Entity*>::iterator iter2;
-		for (iter2 = top.begin(); iter2 != top.end();)
+		std::list<Entity*>::iterator iter;
+		for (iter = top.begin(); iter != top.end();)
 		{
-			delete (*iter2);
-			iter2 = top.erase(iter2);
+			delete (*iter);
+			iter = top.erase(iter);
 		}
 	}
 	top.clear();
 
-	if (entities.size() > 0)
+	if (enemies.size() > 0)
 	{
-		std::list<Enemy*>::iterator iter3;
-		for (iter3 = entities.begin(); iter3 != entities.end();)
+		std::list<Enemy*>::iterator iter;
+		for (iter = enemies.begin(); iter != enemies.end();)
 		{
-			delete (*iter3);
-			iter3 = entities.erase(iter3);
+			delete (*iter);
+			iter = enemies.erase(iter);
 		}
 	}
-	entities.clear();
-}
+	enemies.clear();
 
-void LevelMaker::SetUp()
-{
-	int i;
-	m_lastXBuilding = 0;
-	m_lastXShip = 0;
-	for (i = 0; i < 15; ++i)
+	if (survivors.size() > 0)
 	{
-		Entity * building = new Entity(m_textureBuilding,m_lastXBuilding,m_lastYBuilding,64,256);
-		bottom.push_back(building);
-		m_lastXBuilding += building->GetWidth();
-		float offset = (rand() % 2 == 0) ? -10.0f : 10.0f;
-		m_lastYBuilding += offset;
-		if (m_lastYBuilding < 400.0f)
+		std::list<Survivor*>::iterator iter;
+		for (iter = survivors.begin(); iter != survivors.end();)
 		{
-			m_lastYBuilding = 400.0f;
+			delete (*iter);
+			iter = survivors.erase(iter);
 		}
 	}
-	for (i = 0; i < 3; ++i)
-	{
-		Entity * ship = new Entity(m_textureMotherShip,m_lastXShip,0,512,64);
-		top.push_back(ship);
-		m_lastXShip += ship->GetWidth();
-	}
+	survivors.clear();
 }
-
 
 void LevelMaker::Update(float dt, float edge, Player * player)
 {
-	// float a = dt;
-	std::list<Enemy*>::iterator iter3;
-	for (iter3 = entities.begin(); iter3 != entities.end();)
+	// set difficulty/level according to where the player is
+	if (m_level < 9)
 	{
-		//if (player->Collides((*iter3)))
-		//{
-			// printf("COLLIDING \n");
-		//}
+		if (m_level == 1 && player->GetPosition().x > 1000.0f)
+		{
+			m_level = 2;
+			m_lastYBuilding = SCREEN_HEIGHT - 25.0f; 
+		}
+		else if (m_level == 2 && player->GetPosition().x > 2000.0f)
+		{
+			m_skylineHeight = 75;
+			m_level = 3;
+			m_lastYBuilding = SCREEN_HEIGHT - 50.0f; 
+		}
+		else if (m_level == 3 && player->GetPosition().x > 3000.0f)
+		{
+			m_skylineHeight = 100;
+			m_level = 4;
+			m_lastYBuilding = SCREEN_HEIGHT - 75.0f;
+		}
+		else if (m_level == 4 && player->GetPosition().x > 4000.0f)
+		{
+			m_skylineHeight = 125;
+			m_level = 5;
+			m_lastYBuilding = SCREEN_HEIGHT - 100.0f;
+		}
+		else if (m_level == 5 && player->GetPosition().x > 5000.0f)
+		{
+			m_skylineHeight = 150;
+			m_level = 6;
+			m_lastYBuilding = SCREEN_HEIGHT - 125.0f; 
+		}
+		else if (m_level == 6 && player->GetPosition().x > 6000.0f)
+		{
+			m_skylineHeight = 175;
+			m_level = 7;
+			m_lastYBuilding = SCREEN_HEIGHT - 150.0f; 
+		}
+		else if (m_level == 7 && player->GetPosition().x > 7000.0f)
+		{
+			m_skylineHeight = 200;
+			m_level = 8;
+			m_lastYBuilding = SCREEN_HEIGHT - 175.0f; 
+		}
+		else if (m_level == 8 && player->GetPosition().x > 8000.0f)
+		{
+			m_skylineHeight = 200;
+			m_level = 9;
+			m_lastYBuilding = SCREEN_HEIGHT - m_skylineHeight; 
+		}
+	}
+	
+	// update enemies
+	std::list<Enemy*>::iterator iter3;
+	for (iter3 = enemies.begin(); iter3 != enemies.end();)
+	{
 		(*iter3)->Update(dt);
+		if (player->Collides((*iter3)))
+		{
+			player->Dead(true);
+		}	
 		if ((*iter3)->GetPosition().x + (*iter3)->GetWidth() <= edge)
 	 	{
 	 		delete (*iter3);
-	 		iter3 = entities.erase(iter3);
+	 		iter3 = enemies.erase(iter3);
 	 	}
 	 	else
 		{
@@ -126,26 +172,27 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 	if (m_UFOTimer >= m_UFOFrequency)
 	{
 		m_UFOTimer = 0;
-		Enemy * ufo = new Ufo(m_textureUFO,m_lastXBuilding,400.0f,64,32);
-		entities.push_back(ufo);
+		Enemy * ufo = new Ufo("UFO",m_lastXBuilding,SCREEN_HEIGHT/2.0f,UFO_WIDTH,UFO_HEIGHT);
+		enemies.push_back(ufo);
 	}
 
 	m_CannonTimer += dt;
 	if (m_CannonTimer >= m_CannonFrequency)
 	{
 		m_CannonTimer = 0;
-		Enemy * cannon = new Cannon(m_textureCannon,m_textureLaser,m_lastXBuilding,64.0f,64,32);
-		entities.push_back(cannon);
+		Enemy * cannon = new Cannon("Cannon",m_lastXBuilding,64.0f,CANNON_WIDTH,CANNON_HEIGHT);
+		enemies.push_back(cannon);
 	}
 
+	// update bottom
 	int counter = 0;
 	std::list<Entity*>::iterator iter;
 	for (iter = bottom.begin(); iter != bottom.end();)
 	{
-		//if (player->Collides((*iter)))
-		//{
-		// printf("COLLIDING \n");
-		//}
+		if (player->Collides((*iter)))
+		{
+			player->Dead(true);
+		}	
 		if ((*iter)->GetPosition().x + (*iter)->GetWidth() <= edge)
 	 	{
 	 		delete (*iter);
@@ -157,27 +204,39 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 	 		++iter;
 		}
 	}
-	// TODO Make skyline go higher and higher (and start low)
+	
 	if (counter > 0)
-	{
-		Entity * building = new Entity(m_textureBuilding,m_lastXBuilding,m_lastYBuilding,64,256);
+	{		
+		Entity * building = new Entity("Building",m_lastXBuilding,m_lastYBuilding,BUILDING_WIDTH,BUILDING_HEIGHT);
 		bottom.push_back(building);
+
+		bool occupied = ((rand() % 100) >= 90) ? true : false;
+		if (occupied)
+		{
+			Survivor * a_survivor = new Survivor("Survivor",m_lastXBuilding + BUILDING_WIDTH/2.0f,m_lastYBuilding - SURVIVOR_HEIGHT, SURVIVOR_WIDTH, SURVIVOR_HEIGHT); 
+			survivors.push_back(a_survivor);
+		}
+
 		m_lastXBuilding += building->GetWidth();
 		float offset = (rand() % 2 == 0) ? -10.0f : 10.0f;
 		m_lastYBuilding += offset;
-		if (m_lastYBuilding < 400.0f)
+		if (m_lastYBuilding <= SCREEN_HEIGHT - m_skylineHeight)
 		{
-			m_lastYBuilding = 400.0f;
+			m_lastYBuilding = SCREEN_HEIGHT - m_skylineHeight;
+		}
+		else if (m_lastYBuilding >= SCREEN_HEIGHT)
+		{
+			m_lastYBuilding = SCREEN_HEIGHT - 10.0f;
 		}
 	}
-
+	// top
 	counter = 0;
 	std::list<Entity*>::iterator iter2;
 	for (iter2 = top.begin(); iter2 != top.end();)
 	{
 		if (player->Collides((*iter2)))
 		{
-			// printf("COLLIDING \n");
+			player->Dead(true);
 		}		
 		if ((*iter2)->GetPosition().x + (*iter2)->GetWidth() <= edge)
 	 	{
@@ -193,9 +252,30 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 
 	if (counter > 0)
 	{
-		Entity * ship = new Entity(m_textureMotherShip,m_lastXShip,0,512,64);
+		Entity * ship = new Entity("MotherShip",m_lastXShip,0,SHIP_WIDTH,SHIP_HEIGHT);
 		top.push_back(ship);
 		m_lastXShip += ship->GetWidth();
+	}
+	
+	std::list<Survivor *>::iterator iter4;
+	for (iter4 = survivors.begin(); iter4 != survivors.end();)
+	{
+		(*iter4)->Update(dt);
+		if (player->Collides(*iter4))
+		{
+			(*iter4)->Rescue(true);
+			player->SetScore(player->GetScore() + 1000.0f);
+		}
+		if ((*iter4)->GetPosition().x + (*iter4)->GetWidth() <= edge || (*iter4)->isRescued())
+	 	{
+	 		delete (*iter4);
+	 		iter4 = survivors.erase(iter4);
+			++counter;
+	 	}
+	 	else
+		{
+	 		++iter4;
+		}
 	}
 }
 
@@ -212,9 +292,14 @@ void LevelMaker::Draw(sf::RenderWindow * window)
 		(*iter2)->Draw(window);
 	}
 	std::list<Enemy*>::iterator iter3;
-	for (iter3 = entities.begin(); iter3 != entities.end(); ++iter3)
+	for (iter3 = enemies.begin(); iter3 != enemies.end(); ++iter3)
 	{
 		(*iter3)->Draw(window);
+	}
+	std::list<Survivor*>::iterator iter4;
+	for (iter4 = survivors.begin(); iter4 != survivors.end();++iter4)
+	{
+		(*iter4)->Draw(window);
 	}
 }
 

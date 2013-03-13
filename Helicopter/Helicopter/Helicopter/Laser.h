@@ -9,7 +9,7 @@ class Laser : public Enemy
 {
 public:
 	Laser(void);
-	Laser(sf::Texture& texture, float x, float y, float width, float height);
+	Laser(std::string name, float x, float y, float width, float height);
 	~Laser(void);
 
 	void Update(float dt);

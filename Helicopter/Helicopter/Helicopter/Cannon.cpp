@@ -5,14 +5,14 @@ using namespace helicopter;
 Cannon::Cannon(void)
 {
 	m_timer = 0;
-	m_fireRate = 5;
+	m_fireRate = (float)(rand() % 4 + 2);
 }
 
-Cannon::Cannon(sf::Texture& texture, sf::Texture& textureLaser, float x, float y, float width, float height) : Enemy(texture,x,y,width,height)
+Cannon::Cannon(std::string name, float x, float y, float width, float height) : Enemy(name,x,y,width,height)
 {
 	m_timer = 0;
-	m_fireRate = 5;
-	m_textureLaser = textureLaser;
+	m_fireRate = (float)(rand() % 3 + 2);
+	m_laserSpawn = sf::Vector2f(GetPosition().x + GetWidth()/2.0f,GetPosition().y + GetHeight());
 }
 
 Cannon::~Cannon(void)
@@ -43,7 +43,7 @@ void Cannon::Update(float dt)
 		for (iter = lasers.begin(); iter != lasers.end();)
 		{
 			(*iter)->Update(dt);
-			if ((*iter)->GetPosition().y + (*iter)->GetHeight() >= 600)
+			if ((*iter)->GetPosition().y + (*iter)->GetHeight() >= SCREEN_HEIGHT || (*iter)->GetPosition().x + (*iter)->GetWidth() < 0 )
 			{
 				delete (*iter);
 				iter = lasers.erase(iter);
@@ -58,7 +58,7 @@ void Cannon::Update(float dt)
 
 void Cannon::Shoot(void)
 {
-	Laser * laser = new Laser(m_textureLaser,GetPosition().x,GetPosition().y,8,16);
+	Laser * laser = new Laser("Laser",m_laserSpawn.x,m_laserSpawn.y,LASER_WIDTH,LASER_HEIGHT);
 	lasers.push_back(laser);
 }
 

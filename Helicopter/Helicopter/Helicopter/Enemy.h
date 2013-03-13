@@ -8,7 +8,7 @@ class Enemy : public Entity
 {
 public:
 	Enemy(void) {};
-	Enemy(sf::Texture& texture, float x, float y, float width, float height) : Entity(texture,x,y,width,height) {};
+	Enemy(std::string name, float x, float y, float width, float height) : Entity(name,x,y,width,height) {};
 	~Enemy(void) {};
 
 	virtual void Update(float dt) = 0;

@@ -4,12 +4,12 @@ using namespace helicopter;
 
 Laser::Laser(void)
 {
-	m_speed = 25.0f;
+	m_speed = GAMESPEED;
 }
 
-Laser::Laser(sf::Texture& texture, float x, float y, float width, float height) : Enemy(texture,x,y,width,height)
+Laser::Laser(std::string name, float x, float y, float width, float height) : Enemy(name,x,y,width,height)
 {
-	m_speed = 25.0f;
+	m_speed = GAMESPEED;
 }
 
 

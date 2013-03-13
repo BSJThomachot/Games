@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 namespace helicopter {
-
+// Singleton Class that stores Fonts used in the game
 class FontManager
 {
 public:

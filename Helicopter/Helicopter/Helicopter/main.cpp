@@ -7,57 +7,23 @@ using namespace helicopter;
 
 int main()
 {
-	// SFML window
-	sf::RenderWindow window(sf::VideoMode(800,600), "Helicopter");
-
-	sf::Font font;
-	if (!font.loadFromFile("Fonts/bebas.ttf"))
-	{
-		return EXIT_SUCCESS;
-	}
-
-	sf::Texture texturePlayer;
-    if (!texturePlayer.loadFromFile("Images/CopterRescue.png"))
-	{
-		return EXIT_SUCCESS;
-	}
-	sf::Texture textureBuilding;
-    if (!textureBuilding.loadFromFile("Images/Building.png"))
-	{
-		return EXIT_SUCCESS;
-	}
-	sf::Texture textureMotherShip;
-    if (!textureMotherShip.loadFromFile("Images/MotherShip.png"))
-	{
-		return EXIT_SUCCESS;
-	}
-	sf::Texture textureCannon;
-    if (!textureCannon.loadFromFile("Images/Cannon.png"))
-	{
-		return EXIT_SUCCESS;
-	}
-	sf::Texture textureUFO;
-    if (!textureUFO.loadFromFile("Images/UFO.png"))
-	{
-		return EXIT_SUCCESS;
-	}
-	sf::Texture textureLaser;
-    if (!textureLaser.loadFromFile("Images/Laser.png"))
-	{
-		return EXIT_SUCCESS;
-	}
+	sf::RenderWindow window(sf::VideoMode((int)SCREEN_WIDTH,(int)SCREEN_HEIGHT), "Helicopter");
 
 	Game * CopterGame = new Game();
-	CopterGame->SetUp(font,texturePlayer,textureBuilding,textureMotherShip,textureCannon,textureUFO,textureLaser);
+	CopterGame->SetUp();
 
-	bool UpPressed = false;
-	bool SpacePressed = false;
-	bool SpaceJustPressed = false;
+	bool upPressed = false;
+	bool spacePressed = false;
+	bool spaceJustPressed = false;
+	bool returnPressed = false;
+	bool rPressed = false;
+	bool rJustPressed = false;
 
 	sf::Clock clock;
 	while (window.isOpen())
 	{	
-		SpaceJustPressed = false;
+		spaceJustPressed = false;
+		rJustPressed = false;
 		
 		sf::Time dt = clock.restart();
 		sf::Event event;
@@ -76,12 +42,21 @@ int main()
 				}
 				if (event.key.code == sf::Keyboard::Up)
 				{
-					UpPressed = true;
+					upPressed = true;
 				}
 				if (event.key.code == sf::Keyboard::Space)
 				{
-					SpacePressed = true;
-					SpaceJustPressed = true;
+					spacePressed = true;
+					spaceJustPressed = true;
+				}
+				if (event.key.code == sf::Keyboard::R)
+				{
+					rPressed = true;
+					rJustPressed = true;
+				}
+				if (event.key.code == sf::Keyboard::Return)
+				{
+					returnPressed = true;
 				}
 			}
 			// check key release
@@ -89,22 +64,28 @@ int main()
 			{
 				if (event.key.code == sf::Keyboard::Up)
 				{
-					UpPressed = false;
+					upPressed = false;
 				}
 				if (event.key.code == sf::Keyboard::Space)
 				{
-					SpacePressed = false;
+					spacePressed = false;
+				}
+				if (event.key.code == sf::Keyboard::R)
+				{
+					rPressed = false;
 				}
 			}
 		}
 
-		CopterGame->Update(dt.asSeconds(),UpPressed,SpacePressed,SpaceJustPressed);
+		CopterGame->Update(dt.asSeconds(),upPressed,spacePressed,spaceJustPressed,rPressed,rJustPressed,returnPressed);
 		window.clear(sf::Color(0,0,0,255));
 		CopterGame->Draw(&window);
 		window.display();
 	}
 
+	TextureManager::Destroy();
+	FontManager::Destroy();
 	delete CopterGame;
-
+	
 	return EXIT_SUCCESS;
 }
