@@ -19,6 +19,7 @@ public:
 	sf::Vector2f GetPosition(void);
 	void SetSprite(sf::Sprite sprite);
 	sf::Sprite GetSprite(void);
+	const sf::Texture* GetTexture() const;
 	void SetWidth(float w);
 	float GetWidth(void);
 	void SetHeight(float h);

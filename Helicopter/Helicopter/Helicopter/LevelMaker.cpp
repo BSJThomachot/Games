@@ -33,7 +33,7 @@ void LevelMaker::SetUp()
 	int i;
 	for (i = 0; i < 15; ++i)
 	{
-		Entity * building = new Entity("Building",m_lastXBuilding,m_lastYBuilding,64,256);
+		Entity * building = new Entity("Building",m_lastXBuilding,m_lastYBuilding,BUILDING_WIDTH,BUILDING_HEIGHT);
 		bottom.push_back(building);
 		m_lastXBuilding += building->GetWidth();
 	}
@@ -95,7 +95,7 @@ void LevelMaker::ClearLists()
 
 void LevelMaker::Update(float dt, float edge, Player * player)
 {
-	// set difficulty/level according to where the player is
+	// set difficulty/level according to how far the player is
 	if (m_level < 9)
 	{
 		if (m_level == 1 && player->GetPosition().x > 1000.0f)

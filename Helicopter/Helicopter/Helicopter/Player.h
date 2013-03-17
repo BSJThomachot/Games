@@ -2,6 +2,7 @@
 #define __PLAYER_H_
 #include "Entity.h"
 #include "FontManager.h"
+#include "AnimatedSprite.hpp"
 
 namespace helicopter
 {
@@ -19,10 +20,13 @@ public:
 	float GetScore(void);
 
 	void Restart(float x, float y);
-	void Update(float dt, bool up);
+	void Update(sf::Time deltaTime, bool up);
 	void Draw(sf::RenderWindow * window);
 
 private:
+	AnimatedSprite m_sprites;
+	Animation m_animation;
+
 	float m_velocityX;
 	float m_velocityY;
 	sf::Vector2f m_velocity;

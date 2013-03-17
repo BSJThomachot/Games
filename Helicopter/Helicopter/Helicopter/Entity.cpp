@@ -52,6 +52,11 @@ sf::Sprite Entity::GetSprite(void)
 	return m_image;
 }
 
+const sf::Texture* Entity::GetTexture() const
+{
+	return m_image.getTexture();
+}
+
 void Entity::SetWidth(float w)
 {
 	m_width = w;

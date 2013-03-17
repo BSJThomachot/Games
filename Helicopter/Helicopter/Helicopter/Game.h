@@ -16,7 +16,7 @@ public:
 	void SetUp(void);
 	void Restart(void);
 
-	void Update(float dt, bool up, bool space, bool justSpace, bool R, bool justR, bool returnKey);
+	void Update(sf::Time deltaTime, float dt, bool up, bool space, bool justSpace, bool R, bool justR, bool returnKey);
 	void Draw(sf::RenderWindow * window);
 
 private:

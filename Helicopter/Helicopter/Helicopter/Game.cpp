@@ -26,7 +26,7 @@ void Game::SetUp(void)
 	m_info2.setPosition(SCREEN_WIDTH/2.0f,SCREEN_HEIGHT/2.0f + 100.0f);
 	
 	m_level = new LevelMaker();
-	m_player = new Player("CopterRescue",100,200,COPTER_WIDTH,COPTER_HEIGHT);
+	m_player = new Player("CopterRescueSprites",100,200,COPTER_WIDTH,COPTER_HEIGHT);
 
 	m_level->SetUp();
 }
@@ -68,7 +68,7 @@ void Game::Draw(sf::RenderWindow * window)
 	}
 }
 
-void Game::Update(float dt, bool up, bool space, bool justSpace, bool R, bool justR, bool returnKey)
+void Game::Update(sf::Time deltaTime, float dt, bool up, bool space, bool justSpace, bool R, bool justR, bool returnKey)
 {
 	if (space && justSpace && !m_player->IsDead() && m_started)
 	{
@@ -92,6 +92,6 @@ void Game::Update(float dt, bool up, bool space, bool justSpace, bool R, bool ju
 		m_camera.move(dt*GAMESPEED,0);
 		float edge = m_camera.getCenter().x - (m_camera.getSize().x/2.0f);
 		m_level->Update(dt,edge,m_player);
-		m_player->Update(dt,up);
+		m_player->Update(deltaTime,up);
 	}
 }

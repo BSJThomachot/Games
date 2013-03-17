@@ -30,6 +30,18 @@ Player::Player(std::string name, float x, float y, float width, float height) : 
 	m_textTimer = 0;
 	m_textTime = 2;
 	m_score = 0;
+
+	m_animation.setSpriteSheet(*GetSprite().getTexture());
+	m_animation.addFrame(sf::IntRect(0,0,96,64));
+	m_animation.addFrame(sf::IntRect(96,0,192,64));
+
+	m_sprites = AnimatedSprite(sf::seconds(0.2f));
+	m_sprites.setAnimation(m_animation);
+
+	SetPosition(x,y);
+	m_sprites.setPosition(x,y);
+
+	m_sprites.play();
 }
 
 Player::~Player(void)
@@ -63,6 +75,7 @@ float Player::GetScore(void)
 void Player::Restart(float x, float y)
 {
 	SetPosition(x,y);
+	m_sprites.setPosition(x,y);
 	m_delay = 2.0f;
 	m_dead = false;
 	m_textTimer = 0;
@@ -72,7 +85,7 @@ void Player::Restart(float x, float y)
 
 void Player::Draw(sf::RenderWindow * window)
 {
-	Entity::Draw(window);
+	window->draw(m_sprites);
 	if (m_textTimer > 0 && m_textTimer < m_textTime)
 	{
 		window->draw(m_info);
@@ -80,35 +93,36 @@ void Player::Draw(sf::RenderWindow * window)
 	window->draw(m_scoreInfo);
 }
 
-void Player::Update(float dt, bool up)
+void Player::Update(sf::Time deltaTime, bool up)
 {
 	if (!m_dead)
 	{
+		m_sprites.update(deltaTime);
 		sf::Vector2f pos = GetPosition();
 		if (m_delay > 0)
 		{
-			m_delay -= dt;
+			m_delay -= deltaTime.asSeconds();
 		}
 		else
 		{
-			
 			if (m_textTimer < m_textTime)
 			{
-				m_textTimer += dt;
+				m_textTimer += deltaTime.asSeconds();
 				m_info.setPosition(GetPosition() + sf::Vector2f(0,100));
 			}
 			
-			m_velocityY += 4.9f * dt * dt; // 9.8 / 2
+			m_velocityY += 4.9f * deltaTime.asSeconds() * deltaTime.asSeconds(); // 9.8 / 2
 			if (up)
 			{
-				m_velocityY -= 9.8f * dt * dt;
+				m_velocityY -= 9.8f * deltaTime.asSeconds() * deltaTime.asSeconds();
 			}
 			pos.y += m_velocityY*GAMESPEED/2.0f;
 		}
 
-		pos.x += dt*GAMESPEED;
-		SetScore(m_score + dt*GAMESPEED);
+		pos.x += deltaTime.asSeconds()*GAMESPEED;
+		SetScore(m_score + deltaTime.asSeconds()*GAMESPEED);
 		SetPosition(pos.x,pos.y);
+		m_sprites.setPosition(pos.x,pos.y);
 		m_scoreInfo.setPosition(pos.x - 50.0f,100.0f);
 	}
 }

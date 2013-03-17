@@ -77,7 +77,7 @@ int main()
 			}
 		}
 
-		CopterGame->Update(dt.asSeconds(),upPressed,spacePressed,spaceJustPressed,rPressed,rJustPressed,returnPressed);
+		CopterGame->Update(dt,dt.asSeconds(),upPressed,spacePressed,spaceJustPressed,rPressed,rJustPressed,returnPressed);
 		window.clear(sf::Color(0,0,0,255));
 		CopterGame->Draw(&window);
 		window.display();
