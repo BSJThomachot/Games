@@ -70,6 +70,17 @@ void LevelMaker::ClearLists()
 	}
 	top.clear();
 
+	if (cannons.size() > 0)
+	{
+		std::list<Cannon*>::iterator iter;
+		for (iter = cannons.begin(); iter != cannons.end();)
+		{
+			delete (*iter);
+			iter = cannons.erase(iter);
+		}
+	}
+	cannons.clear();
+
 	if (enemies.size() > 0)
 	{
 		std::list<Enemy*>::iterator iter;
@@ -167,6 +178,35 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 		}
 	}
 
+	// update cannons
+	std::list<Cannon*>::iterator iter5;
+	for (iter5 = cannons.begin(); iter5 != cannons.end();)
+	{
+		(*iter5)->Update(dt);
+		if (player->Collides((*iter5)))
+		{
+			player->Dead(true);
+		}
+		std::list<Laser*>::iterator iterLaser;
+		for (iterLaser = (*iter5)->lasers.begin(); iterLaser != (*iter5)->lasers.end();++iterLaser)
+		{
+			if (player->Collides((*iterLaser)))
+			{
+				player->Dead(true);
+			}
+
+		}
+		if ((*iter5)->GetPosition().x + (*iter5)->GetWidth() <= edge)
+	 	{
+	 		delete (*iter5);
+	 		iter5 = cannons.erase(iter5);
+	 	}
+	 	else
+		{
+	 		++iter5;
+		}
+	}
+
 
 	m_UFOTimer += dt;
 	if (m_UFOTimer >= m_UFOFrequency)
@@ -180,8 +220,8 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 	if (m_CannonTimer >= m_CannonFrequency)
 	{
 		m_CannonTimer = 0;
-		Enemy * cannon = new Cannon("Cannon",m_lastXBuilding,64.0f,CANNON_WIDTH,CANNON_HEIGHT);
-		enemies.push_back(cannon);
+		Cannon * cannon = new Cannon("Cannon",m_lastXBuilding,64.0f,CANNON_WIDTH,CANNON_HEIGHT);
+		cannons.push_back(cannon);
 	}
 
 	// update bottom
@@ -300,6 +340,11 @@ void LevelMaker::Draw(sf::RenderWindow * window)
 	for (iter4 = survivors.begin(); iter4 != survivors.end();++iter4)
 	{
 		(*iter4)->Draw(window);
+	}
+	std::list<Cannon*>::iterator iter5;
+	for (iter5 = cannons.begin(); iter5 != cannons.end();++iter5)
+	{
+		(*iter5)->Draw(window);
 	}
 }
 

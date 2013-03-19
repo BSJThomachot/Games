@@ -1,6 +1,6 @@
 #ifndef __ENEMY_H_
 #define __ENEMY_H_
-#include "entity.h"
+#include "Entity.h"
 
 namespace helicopter {
 

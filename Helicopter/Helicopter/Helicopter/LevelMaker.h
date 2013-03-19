@@ -23,10 +23,10 @@ public:
 
 private:
 
-	std::list<Entity*> obstacles;
 	std::list<Entity*> top;
 	std::list<Entity*> bottom;
 	std::list<Enemy*> enemies;
+	std::list<Cannon*> cannons;
 	std::list<Survivor*> survivors;
 
 	float m_lastXBuilding;

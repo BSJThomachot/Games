@@ -17,14 +17,14 @@ public:
 	void Draw(sf::RenderWindow * window);
 	void Shoot(void);
 
+	std::list<Laser*> lasers;
+
 private:
 
 	float m_fireRate;
 	float m_timer;
 
 	sf::Vector2f m_laserSpawn;
-
-	std::list<Laser*> lasers;
 };
 
 }
