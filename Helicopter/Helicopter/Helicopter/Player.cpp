@@ -81,6 +81,8 @@ void Player::Restart(float x, float y)
 	m_textTimer = 0;
 	m_textTime = 2;
 	m_score = 0;
+	m_velocityX = 0;
+	m_velocityY = 0;
 }
 
 void Player::Draw(sf::RenderWindow * window)

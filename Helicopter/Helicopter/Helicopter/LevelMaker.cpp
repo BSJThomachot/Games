@@ -162,11 +162,11 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 	std::list<Enemy*>::iterator iter3;
 	for (iter3 = enemies.begin(); iter3 != enemies.end();)
 	{
-		(*iter3)->Update(dt);
-		if (player->Collides((*iter3)))
-		{
-			player->Dead(true);
-		}	
+		(*iter3)->Update(dt,player);
+		//if (player->Collides((*iter3)))
+		//{
+		//	player->Dead(true);
+		//}	
 		if ((*iter3)->GetPosition().x + (*iter3)->GetWidth() <= edge)
 	 	{
 	 		delete (*iter3);
@@ -182,20 +182,20 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 	std::list<Cannon*>::iterator iter5;
 	for (iter5 = cannons.begin(); iter5 != cannons.end();)
 	{
-		(*iter5)->Update(dt);
-		if (player->Collides((*iter5)))
-		{
-			player->Dead(true);
-		}
-		std::list<Laser*>::iterator iterLaser;
-		for (iterLaser = (*iter5)->lasers.begin(); iterLaser != (*iter5)->lasers.end();++iterLaser)
-		{
-			if (player->Collides((*iterLaser)))
-			{
-				player->Dead(true);
-			}
-
-		}
+		(*iter5)->Update(dt,player);
+		//if (player->Collides((*iter5)))
+		//{
+		//	player->Dead(true);
+		//}
+		//std::list<Laser*>::iterator iterLaser;
+		//for (iterLaser = (*iter5)->lasers.begin(); iterLaser != (*iter5)->lasers.end();++iterLaser)
+		//{
+		//	if (player->Collides((*iterLaser)))
+		//	{
+		//		player->Dead(true);
+		//	}
+		//
+		//}
 		if ((*iter5)->GetPosition().x + (*iter5)->GetWidth() <= edge)
 	 	{
 	 		delete (*iter5);
@@ -300,12 +300,12 @@ void LevelMaker::Update(float dt, float edge, Player * player)
 	std::list<Survivor *>::iterator iter4;
 	for (iter4 = survivors.begin(); iter4 != survivors.end();)
 	{
-		(*iter4)->Update(dt);
-		if (player->Collides(*iter4))
-		{
-			(*iter4)->Rescue(true);
-			player->SetScore(player->GetScore() + 1000.0f);
-		}
+		(*iter4)->Update(dt,player);
+		//if (player->Collides(*iter4))
+		//{
+		//	(*iter4)->Rescue(true);
+		//	player->SetScore(player->GetScore() + 1000.0f);
+		//}
 		if ((*iter4)->GetPosition().x + (*iter4)->GetWidth() <= edge || (*iter4)->isRescued())
 	 	{
 	 		delete (*iter4);

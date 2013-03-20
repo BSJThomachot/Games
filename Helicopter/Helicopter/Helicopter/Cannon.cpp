@@ -29,7 +29,7 @@ Cannon::~Cannon(void)
 	lasers.clear();
 }
 
-void Cannon::Update(float dt)
+void Cannon::Update(float dt, Player * p)
 {
 	m_timer += dt;
 	if (m_timer >= m_fireRate)
@@ -37,12 +37,16 @@ void Cannon::Update(float dt)
 		Shoot();
 		m_timer = 0;
 	}
+	if (Collides(p))
+	{
+		p->Dead(true);
+	}
 	if (lasers.size() > 0)
 	{
 		std::list<Laser*>::iterator iter;
 		for (iter = lasers.begin(); iter != lasers.end();)
 		{
-			(*iter)->Update(dt);
+			(*iter)->Update(dt,p);
 			if ((*iter)->GetPosition().y + (*iter)->GetHeight() >= SCREEN_HEIGHT || (*iter)->GetPosition().x + (*iter)->GetWidth() < 0 )
 			{
 				delete (*iter);

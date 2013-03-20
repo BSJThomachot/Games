@@ -1,5 +1,6 @@
 #ifndef __UFO_H_
 #define __UFO_H_
+#include "Player.h"
 #include "Enemy.h"
 
 namespace helicopter
@@ -12,7 +13,7 @@ public:
 	Ufo(std::string name, float x, float y, float width, float height);
 	~Ufo(void);
 
-	void Update(float dt);
+	void Update(float dt, Player * p);
 
 private: 
 

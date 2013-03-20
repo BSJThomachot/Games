@@ -1,6 +1,6 @@
 #ifndef __SURVIVOR_H_
 #define __SURVIVOR_H_
-#include "Entity.h"
+#include "Player.h"
 #include "FontManager.h"
 
 
@@ -14,7 +14,7 @@ public:
 	~Survivor(void);
 
 	void Draw(sf::RenderWindow * window);
-	void Update(float dt);
+	void Update(float dt, Player * p);
 
 	bool isRescued(void);
 	void Rescue(bool value);

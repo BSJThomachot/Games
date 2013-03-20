@@ -17,8 +17,12 @@ Laser::~Laser(void)
 {
 }
 
-void Laser::Update(float dt)
+void Laser::Update(float dt, Player * p)
 {
+	if (Collides(p))
+	{
+		p->Dead(true);
+	}	
 	sf::Vector2f pos = GetPosition();
 	pos.y += dt*m_speed;
 	SetPosition(pos.x,pos.y);

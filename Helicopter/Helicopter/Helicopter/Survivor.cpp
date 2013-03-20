@@ -50,12 +50,18 @@ void Survivor::Draw(sf::RenderWindow * window)
 }
 
 
-void Survivor::Update(float dt)
-{
+void Survivor::Update(float dt, Player * p)
+{	
 	m_timer += dt;
 	if (m_timer >= m_speechTime)
 	{
 		m_isTalking = !m_isTalking;
 		m_timer = 0;
+	}
+
+	if (Collides(p))
+	{
+		m_rescued = true;
+		p->SetScore(p->GetScore() + 1000.0f);
 	}
 }

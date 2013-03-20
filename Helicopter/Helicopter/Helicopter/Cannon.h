@@ -1,5 +1,6 @@
 #ifndef __CANNON_H_
 #define __CANNON_H_
+#include "Player.h"
 #include "Laser.h"
 #include <list>
 
@@ -13,7 +14,7 @@ public:
 	Cannon(std::string name, float x, float y, float width, float height);
 	~Cannon(void);
 
-	void Update(float dt);
+	void Update(float dt, Player * p);
 	void Draw(sf::RenderWindow * window);
 	void Shoot(void);
 

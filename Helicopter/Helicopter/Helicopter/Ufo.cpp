@@ -24,8 +24,13 @@ Ufo::~Ufo(void)
 }
 
 
-void Ufo::Update(float dt)
+void Ufo::Update(float dt, Player * p)
 {
+	if (Collides(p))
+	{
+		p->Dead(true);
+	}		
+	
 	sf::Vector2f pos = GetPosition();
 	m_timer += dt;
 	pos.y = m_originY + cos(m_timer)*m_range;

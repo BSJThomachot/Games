@@ -11,7 +11,7 @@ public:
 	Enemy(std::string name, float x, float y, float width, float height) : Entity(name,x,y,width,height) {};
 	~Enemy(void) {};
 
-	virtual void Update(float dt) = 0;
+	virtual void Update(float dt, Player * p) = 0;
 };
 
 }
