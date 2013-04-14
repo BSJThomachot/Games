@@ -34,6 +34,8 @@ public:
 	int GetHeight(void);
 	void SetScore(int s);
 	int GetScore(void);
+
+	void Stretch(float factor, float dt);
 	
 	void Draw(sf::RenderWindow * window);
 	void Update(bool up, bool down, float dt);

@@ -18,6 +18,7 @@ Portal::Portal(sf::Texture& texture, float x, float y, int width, int height)
 	m_other = NULL;
 	m_type = MOVE;
 	m_active = true;
+	SetScale(0.15f);
 }
 
 
@@ -101,6 +102,17 @@ void Portal::Pair(Portal * other)
 	m_other = other;
 }
 
+void Portal::SetScale(float scale)
+{
+	m_sprite.setScale(scale,scale);
+	m_scale = scale;
+}
+
+float Portal::GetScale(void)
+{
+	return m_scale;
+}
+
 
 void Portal::Warp(Ball * ball)
 {
@@ -128,11 +140,11 @@ void Portal::Warp(Ball * ball)
 // check if a ball is in the portal
 bool Portal::Intersects(Ball * ball)
 {
-	if (m_x > ball->GetPosition().x + ball->GetDim() || ball->GetPosition().x > m_x + m_width)
+	if (m_x > ball->GetPosition().x + ball->GetDim() || ball->GetPosition().x > m_x + (float)m_width*m_scale)
 	{
 		return false;
 	}
-	if (m_y > ball->GetPosition().y + ball->GetDim()  || ball->GetPosition().y > m_y + m_height)
+	if (m_y > ball->GetPosition().y + ball->GetDim()  || ball->GetPosition().y > m_y + (float)m_height*m_scale)
 	{
 		return false;
 	}
@@ -142,16 +154,22 @@ bool Portal::Intersects(Ball * ball)
 
 void Portal::Draw(sf::RenderWindow * window)
 {
-	if (m_active)
+	if (m_scale > 0.1f)
 	{
 		window->draw(m_sprite);
 	}
 }
 
-void Portal::Update(Ball * ball)
+void Portal::Update(Ball * ball, float dt)
 {
 	if (m_active)
 	{
+		if (m_scale < 1)
+		{
+			m_scale += (1.0f - m_scale) * 10.0f * dt;
+			SetScale(m_scale);
+		}
+		
 		if (Intersects(ball))
 		{
 			if (!ball->IsWarpping())
@@ -164,6 +182,29 @@ void Portal::Update(Ball * ball)
 			if (!m_other->Intersects(ball))
 			{
 				ball->Warpping(false);
+			}
+		}
+	}
+	else
+	{
+		if (m_scale > 0.1f)
+		{
+			m_scale += (0.05f - m_scale) * 10.0f * dt;
+			SetScale(m_scale);
+
+			if (Intersects(ball))
+			{
+				if (!ball->IsWarpping())
+				{
+					Warp(ball);
+				}
+			}
+			else 
+			{
+				if (!m_other->Intersects(ball))
+				{
+					ball->Warpping(false);
+				}
 			}
 		}
 	}

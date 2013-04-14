@@ -145,6 +145,7 @@ void Ball::Launch(void)
 	m_speed = 200.0f;
 }
 
+
 void Ball::Draw(sf::RenderWindow * window)
 {
 	window->draw(m_sprite);
@@ -160,6 +161,16 @@ void Ball::Update(Player * p1, Player * p2, float dt)
 	// if the ball is in game
 	if (this->m_inGame)
 	{
+		if (m_sprite.getScale().x > m_scale)
+		{
+			float scaleX = m_sprite.getScale().x;
+			float scaleY = m_sprite.getScale().y;
+			scaleX += (m_scale - scaleX) * 10.0f * dt;
+			scaleY += (m_scale - scaleY) * 10.0f * dt;
+			m_sprite.setScale(scaleX,scaleY);
+		}
+		
+		
 		// update coordinates according to direction
 		m_x += m_dirX*m_speed*dt;
 		m_y += m_dirY*m_speed*dt;
@@ -168,11 +179,13 @@ void Ball::Update(Player * p1, Player * p2, float dt)
 		{
 			m_y = SCREEN_HEIGHT - 32;
 			m_dirY *= -1;
+			m_sprite.setScale(m_scale*1.25f,m_scale*1.25f);
 		}
 		else if (m_y < 0)
 		{
 			m_y = 0;
 			m_dirY *= -1;
+			m_sprite.setScale(m_scale*1.25f,m_scale*1.25f);
 		}
 		// Score!
 		else if (m_x > SCREEN_WIDTH - 32)
@@ -213,11 +226,12 @@ void Ball::Update(Player * p1, Player * p2, float dt)
 				m_speed *= 1.1f;
 				// is colliding
 				m_colliding = true;
+				m_sprite.setScale(m_scale*1.25f,m_scale*1.25f);
 			}
 		}
 		else
 		{
-			this->m_colliding = false;
+			m_colliding = false;
 		}
 	}
 	else // not in game
@@ -235,5 +249,4 @@ void Ball::Update(Player * p1, Player * p2, float dt)
 	}
 
 	m_sprite.setPosition( m_x, m_y);
-
 }

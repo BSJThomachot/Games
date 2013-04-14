@@ -38,13 +38,15 @@ public:
 	void Pair(Portal * other);
 	bool IsActive(void);
 	void Activate(bool val);
+	void SetScale(float scale);
+	float GetScale(void);
 	
 	
 	void Warp(Ball * ball);
 	bool Intersects(Ball * ball);
 
 	void Draw(sf::RenderWindow * window);
-	void Update(Ball * ball);
+	void Update(Ball * ball, float dt);
 
 private:
 
@@ -53,6 +55,7 @@ private:
 	int m_width;
 	int m_height;
 	sf::Sprite m_sprite;
+	float m_scale;
 	Portal * m_other;
 	PortalType m_type;
 

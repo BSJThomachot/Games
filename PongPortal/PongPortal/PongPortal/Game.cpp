@@ -85,8 +85,8 @@ void Game::Update(bool up1, bool down1, bool up2, bool down2, bool space,  bool 
 		m_player1->Update( up1, down1, dt);
 		m_player2->Update( up2, down2, dt);
 		m_ball->Update( m_player1, m_player2, dt);
-		m_portalA->Update(m_ball);
-		m_portalB->Update(m_ball);
+		m_portalA->Update(m_ball,dt);
+		m_portalB->Update(m_ball,dt);
 
 		m_timer -= dt;
 
